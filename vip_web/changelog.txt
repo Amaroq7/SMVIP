@@ -1,0 +1,44 @@
+0.1.6 (07.03.2015)
+- fixed minor error
+
+0.1.5 (21.02.2015)
+- fixed unique name for "defuser" cvar to correctly update motd
+
+0.1.4 (11.02.2015)
+- added new cvar sm_vip_reservation (it's just information for motd)
+- changed a little bit methodmap
+- taser is now given at the spawn
+- updated motd (added info about reservation, added numbers) (backwards compatibility has been saved)
+- changed a way to format url to the web
+- added auto exec config
+
+0.1.3 (09.02.2015)
+- temporary workaround for weapons' skins (except CZ75a, don't worry i'm still working on it! :P)
+- renamed cvar sm_vip_info to sm_vip_msg it was colliding with command
+
+0.1.2 (08.02.2015)
+- added dynamic motd which is available under /vip or !vip commands (its changes depend on cvars)
+- corrected double vip prefix bug in chat
+- added titles for menus with secondary & primary weapons
+- removed exit buttons from sub-menus (prim & sec weapons)
+- added check for engine (only csgo)
+- removed some hardcoded values
+
+0.1.1 (07.02.2015)
+- changed structure of weapon menu
+- improved menu collisions (vip now can re-enable menu when other menu disturbed him)
+- added colors for chat message
+- improved warmup detection
+- added timeout for menu (buytime)
+- added check if player is alive when choosing weapons
+
+0.1.0 (06.02.2015)
+- added weapon menu
+- rewrite plugin to new sourcepawn syntax (now using methodmaps & object-oriented syntax)
+- added info about plugin (chat commands etc.)
+- added save system for players' weapon set (cookies)
+- added taser for vip (cvar)
+- changed color when a vip comes to a server
+
+0.0.1-0.0.5 (Alpha) (xx.11.2014-28.01.2015)
+- generally fixes
