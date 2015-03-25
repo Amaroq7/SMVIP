@@ -52,7 +52,7 @@ int g_iTeamPrimaryWeapons[PRIMARY_WEAPONS_COUNT] = { 0, 0, CS_TEAM_CT, CS_TEAM_T
 
 int g_iTeamSecondaryWeapons[SECONDARY_WEAPONS_COUNT] = { CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_CT, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, CS_TEAM_CT, CS_TEAM_T };
 
-char g_szUrlMotd[512] = { "http://vipggwp.gameclan.pl/vip/index.html?web=http://vipggwp.gameclan.pl/vip/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
+char g_szUrlMotd[512] = { "http://YOUR_WEB/vip_web/index.html?web=http://YOUR_WEB/vip_web/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
 
 ConVar g_pMaxMoney;
 ConVar g_pArmorValue;
