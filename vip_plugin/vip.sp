@@ -11,10 +11,10 @@
 
 /* Plugin's info */
 char szAuthor[] = "Ni3znajomy";
-char szVersion[] = "0.1.6";
+char szVersion[] = "0.1.7";
 char szURL[] = "https://github.com/Ni3znajomy";
 char szPlugin[] = "V.I.P.";
-char szWebPluginVersion[] = "000106";
+char szWebPluginVersion[] = "000107";
 
 public Plugin myinfo = 
 {
