@@ -11,10 +11,10 @@
 
 /* Plugin's info */
 char szAuthor[] = "Ni3znajomy";
-char szVersion[] = "0.1.8";
+char szVersion[] = "0.1.7";
 char szURL[] = "https://github.com/Ni3znajomy";
 char szPlugin[] = "V.I.P.";
-char szWebPluginVersion[] = "000108";
+char szWebPluginVersion[] = "000107";
 
 public Plugin myinfo = 
 {
@@ -817,8 +817,8 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 			
 			client.not_changed_team = false;
 
-			if(client_pl.team == CS_TEAM_CT)
-				client_pl.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
+			if(client.team == CS_TEAM_CT)
+				client.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
 
 			//int iUSP = GetEntProp(iWeapon, Prop_Send, "m_bSilencerOn", 1);
 		}
