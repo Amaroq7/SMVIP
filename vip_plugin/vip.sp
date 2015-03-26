@@ -816,6 +816,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 			client.team = iTeam;
 			
 			client.not_changed_team = false;
+
+			if(client_pl.team == CS_TEAM_CT)
+				client_pl.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
+
 			//int iUSP = GetEntProp(iWeapon, Prop_Send, "m_bSilencerOn", 1);
 		}
 		else if(param2 == 9)
