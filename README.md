@@ -13,6 +13,7 @@
 # To Do
 - multilingual
 - vip models
+- add support for CSS
 
 # Known Bugs
 - If you have usp-s in your loadout and you choose p2000 from the weapon menu, you will get usp-s
