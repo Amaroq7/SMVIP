@@ -34,13 +34,13 @@ public Plugin myinfo =
 /* End Defines */
 
 /* Global variables */
-bool g_bIsVip[MAXPLAYERS];
+bool g_bIsVip[MAXPLAYERS+1];
 bool g_bBuyTimeExpired;
-bool g_bDisturbed[MAXPLAYERS];
-bool g_bShowChangedTeamMsg[MAXPLAYERS];
+bool g_bDisturbed[MAXPLAYERS+1];
+bool g_bShowChangedTeamMsg[MAXPLAYERS+1];
 
-int g_iPrimWeap[MAXPLAYERS];
-int g_iSecWeap[MAXPLAYERS];
+int g_iPrimWeap[MAXPLAYERS+1];
+int g_iSecWeap[MAXPLAYERS+1];
 int g_iRound;
 
 char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "Nova", "XM1014", "MAG-7", "Obrzyn", "MAC-10", "MP7", "MP9", "UMP-45", "PP-Bizon", "P90", "FAMAS", "M4A4", "M4A1-S", "Galil AR", "AK-47", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20", "M249", "Negev" };
