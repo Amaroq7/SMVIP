@@ -147,11 +147,11 @@ public void OnPluginStart()
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
 
-	HookEvent("round_start", RoundStartEvent, EventHookMode_Post);
-	HookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_Post);
-	HookEvent("announce_phase_end", EndRestartMatch, EventHookMode_Post);
-	HookEvent("buytime_ended", BuyTime_Ended, EventHookMode_Post);
-	HookEvent("cs_intermission", EndRestartMatch, EventHookMode_Post);
+	HookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
+	HookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_PostNoCopy);
+	HookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
+	HookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
+	HookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
@@ -657,9 +657,9 @@ public void OnPluginEnd()
 
 	UnhookUserMessage(g_hWarmupEnded, WarmupEnded_Hook, false);
 
-	UnhookEvent("round_start", RoundStartEvent, EventHookMode_Post);
-	UnhookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_Post);
-	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_Post);
-	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_Post);
-	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_Post);
+	UnhookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
+	UnhookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_PostNoCopy);
+	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
+	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
+	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
 }
