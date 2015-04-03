@@ -13,16 +13,6 @@ methodmap Entity
 		return view_as<Entity>(index);
 	}
 
-	public void sdk_hook(SDKHookType type, SDKHookCB callback)
-	{
-		SDKHook(this.index, type, callback);
-	}
-	
-	public void sdk_unhook(SDKHookType type, SDKHookCB callback)
-	{
-		SDKUnhook(this.index, type, callback);
-	}
-
 	public int GetProp(PropType type, const char[] key, int size = 4, int element = 0)
 	{
 		return GetEntProp(this.index, type, key, size, element);

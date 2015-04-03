@@ -1,6 +1,5 @@
 #include <sourcemod>
 #include <sdktools>
-#include <sdkhooks>
 #include <cstrike>
 #include <clientprefs>
 
@@ -152,6 +151,7 @@ public void OnPluginStart()
 	HookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	HookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	HookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
+	HookEvent("player_spawned", PlayerSpawned, EventHookMode_Post);
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
@@ -583,8 +583,6 @@ public void OnClientPostAdminCheck(int client)
 		if(!client_pl.vip)
 			return;
 			
-		client_pl.sdk_hook(SDKHook_SpawnPost, OnPlayerSpawnPost);
-			
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;
@@ -597,16 +595,15 @@ public void OnClientDisconnect(int client)
 	Player client_pl = Player(client);
 	if(client_pl.vip)
 	{
-		client_pl.sdk_unhook(SDKHook_SpawnPost, OnPlayerSpawnPost);
 		client_pl.vip = false;
 		client_pl.disturbed = false;
 	}
 }
 
-public void OnPlayerSpawnPost(int client)
+public void PlayerSpawned(Event event, const char[] name, bool dontBroadcast)
 {
-	Player client_pl = Player(client);
-	if(client_pl.vip && client_pl.IsAlive())
+	Player client_pl = Player(GetClientOfUserId(event.GetInt("userid")));
+	if(client_pl.vip && client_pl.IsAlive() && !event.GetBool("inrestart"))
 	{
 		client_pl.SetProp(Prop_Send, "m_iHealth", client_pl.GetProp(Prop_Send, "m_iHealth")+g_pAddHP.IntValue);
 
@@ -662,5 +659,6 @@ public void OnPluginEnd()
 	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
+	UnhookEvent("player_spawned", PlayerSpawned, EventHookMode_Post);
 	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 }
