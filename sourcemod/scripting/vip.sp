@@ -662,4 +662,5 @@ public void OnPluginEnd()
 	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
+	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 }
