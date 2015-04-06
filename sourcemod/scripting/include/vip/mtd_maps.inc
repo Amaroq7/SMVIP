@@ -223,6 +223,9 @@ methodmap Player < Entity
 
 	public void OpenMenuCmd()
 	{
+		if(g_iRound < g_pRound.IntValue)
+			return;
+
 		//Check if other menu disturbed player to choose weapon
 		if(!this.disturbed)
 			return;

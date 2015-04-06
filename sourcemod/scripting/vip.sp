@@ -335,9 +335,6 @@ public Action ShowVipInfo(int client, int args)
 
 public Action ReopenVipMenu(int client, int args)
 {
-	if(g_iRound < g_pRound.IntValue)
-		return Plugin_Handled;
-
 	Player player_client = Player(client);
 
 	player_client.OpenMenuCmd();
