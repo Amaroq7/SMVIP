@@ -81,14 +81,6 @@ ArrayList g_adtVips;
 
 /* End Global variables */
 
-/* Enums */
-enum
-{
-	TextInterrupted = 0,
-	TextBuyTimeExp
-}
-/* End Enums */
-
 #include <vip/mtd_maps>
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -395,7 +387,7 @@ public void OnConfigsExecuted()
 
 public Action TimerVipInfo(Handle timer)
 {
-	PrintToChatAll("\x01[VIP]\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
+	PrintChatAll("\x01[VIP]\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
 }
 
 //Load client's preferences
@@ -419,7 +411,7 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		client.primary_weapon = param2;
@@ -440,10 +432,10 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.InfoChat(TextBuyTimeExp);
+				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 				return;
 			}
-			client.InfoChat(TextInterrupted);
+			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -457,7 +449,7 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		client.secondary_weapon = param2;
@@ -479,10 +471,10 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.InfoChat(TextBuyTimeExp);
+				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 				return;
 			}
-			client.InfoChat(TextInterrupted);
+			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -516,7 +508,7 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		if(param2 == 1)
@@ -569,10 +561,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
-		client.InfoChat(TextInterrupted);
+		client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 		client.disturbed = true;
 	}
 }
@@ -641,6 +633,21 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
 		g_iRound = 0;
 	}
 	return Plugin_Continue;
+}
+
+public void PrintChatAll(char[] text, any ...)
+{
+	static char szText[192];
+	Player client;
+
+	for(int i=1; i<=MaxClients; i++)
+	{	
+		SetGlobalTransTarget(i);
+		VFormat(szText, sizeof(szText), text, 2);
+
+		client = Player(i);
+		client.PrintChat(szText);
+	}
 }
 
 public void OnPluginEnd()

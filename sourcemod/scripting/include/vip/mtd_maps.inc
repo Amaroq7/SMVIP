@@ -169,14 +169,17 @@ methodmap Player < Entity
 
 		ReplyToCommand(this.index, "Plugin: %s\nWersja: %s\nAutor: %s\nStrona: %s\nPlugin skompilowany pod: %s\nLicencja: %s", szPlugin, szVersion, szAuthor, szURL, SOURCEMOD_VERSION, "GPLv3");
 	}
-	public void InfoChat(int type)
+
+	public void PrintChat(char[] text, any ...)
 	{
-		switch(type)
-		{
-			case 0: PrintToChat(this.index, "\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
-			case 1: PrintToChat(this.index, "\x01[VIP] \x02Czas kupowania minął!");
-		}
+		static char szText[192];
+		
+		SetGlobalTransTarget(this.index);
+		VFormat(szText, sizeof(szText), text, 2);
+		
+		PrintToChat(this.index, szText);
 	}
+
 	public void VipUpdate()
 	{
 		this.vip = true;
@@ -247,7 +250,7 @@ methodmap Player < Entity
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
-			this.InfoChat(TextBuyTimeExp);
+			this.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		//If everything's ok we show menu
@@ -286,7 +289,7 @@ methodmap Player < Entity
 			else
 				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
 		}
-		PrintToChat(this.index, szText);
+		this.PrintChat(szText);
 	}
 };
 
