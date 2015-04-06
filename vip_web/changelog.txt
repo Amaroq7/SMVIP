@@ -1,3 +1,13 @@
+0.1.8 (07.04.2015)
+- added command to see who, currently on a server, has VIP staus
+- rewrite & reworked some commands & methods
+- some optimization
+- changed way to detect player's spawn
+- fixed possibly "index out of bounds" error
+- corrected typo
+- removed unnecessary info about plugin
+- some works to prepare plugin for multilingual system
+
 0.1.7 (26.03.2015)
 - fixed bug with defuser
 
