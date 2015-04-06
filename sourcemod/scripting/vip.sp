@@ -77,6 +77,8 @@ UserMsg g_hWarmupEnded;
 
 bool g_bSayText2Hooked;
 
+ArrayList g_adtVips;
+
 /* End Global variables */
 
 /* Enums */
@@ -156,7 +158,10 @@ public void OnPluginStart()
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
 	RegConsoleCmd("vip", ShowVipInfo, "Shows MOTD about VIP");
+	RegConsoleCmd("vips", ShowVipsOnServer, "Shows VIPs on server");
 	RegAdminCmd("menuv", ReopenVipMenu, ADMFLAG_CUSTOM6, "Reopens vip menu");
+
+	g_adtVips = new ArrayList(1);
 
 	//VIP prefix
 	g_hSayText2 = GetUserMessageId("SayText2");
@@ -338,6 +343,14 @@ public Action ReopenVipMenu(int client, int args)
 	Player player_client = Player(client);
 
 	player_client.OpenMenuCmd();
+	return Plugin_Handled;
+}
+
+public Action ShowVipsOnServer(int client, int args)
+{
+	Player player_client = Player(client);
+	
+	player_client.PrintVips();
 	return Plugin_Handled;
 }
 
@@ -573,7 +586,7 @@ public void OnClientPostAdminCheck(int client)
 		client_pl.VipUpdate();
 		if(!client_pl.vip)
 			return;
-			
+		
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;

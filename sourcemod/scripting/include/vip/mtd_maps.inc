@@ -186,6 +186,17 @@ methodmap Player < Entity
 
 		if(!GetAdminFlag(this.adminid, Admin_Custom6, Access_Effective))
 			this.vip = false;
+
+		int iIndex = g_adtVips.FindValue(this.index);
+
+		if(this.vip && iIndex == -1)
+		{
+			g_adtVips.Push(this.index);
+		}
+		else if(!this.vip && iIndex != -1)
+		{
+			g_adtVips.Erase(iIndex);
+		}
 	}
 
 	public void VIPMenu()
@@ -254,6 +265,28 @@ methodmap Player < Entity
 		kv.SetString("msg", msg);
 		ShowVGUIPanel(this.index, "info", kv);
 		delete kv;
+	}
+
+	public void PrintVips()
+	{
+		static char szText[192];
+		static char szName[MAX_NAME_LENGTH];
+		int iLen;
+		Player client;
+
+		iLen = strcopy(szText, sizeof(szText), "VIPy Online: ");
+
+		for(int i=0; i<g_adtVips.Length; i++)
+		{
+			client = Player(g_adtVips.Get(i));
+			client.GetName(szName, sizeof(szName));
+
+			if(!(i+1 == g_adtVips.Length))
+				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01,", szName);
+			else
+				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
+		}
+		PrintToChat(this.index, szText);
 	}
 };
 
