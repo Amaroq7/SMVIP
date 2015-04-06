@@ -8,7 +8,8 @@
 - free taser (cvar)
 - additional hp at round start (cvar)
 - free defuser (cvar)
-- additional money at round start (cvar)
+- extra money at round start (cvar)
+- prints in chat who, currently on a server, has VIP status (command)
 
 # To Do
 - multilingual
