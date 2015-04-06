@@ -169,14 +169,17 @@ methodmap Player < Entity
 
 		ReplyToCommand(this.index, "Plugin: %s\nWersja: %s\nAutor: %s\nStrona: %s\nPlugin skompilowany pod: %s\nLicencja: %s", szPlugin, szVersion, szAuthor, szURL, SOURCEMOD_VERSION, "GPLv3");
 	}
-	public void InfoChat(int type)
+
+	public void PrintChat(char[] text, any ...)
 	{
-		switch(type)
-		{
-			case 0: PrintToChat(this.index, "\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
-			case 1: PrintToChat(this.index, "\x01[VIP] \x02Czas kupowania minął!");
-		}
+		static char szText[192];
+		
+		SetGlobalTransTarget(this.index);
+		VFormat(szText, sizeof(szText), text, 2);
+		
+		PrintToChat(this.index, szText);
 	}
+
 	public void VipUpdate()
 	{
 		this.vip = true;
@@ -186,6 +189,17 @@ methodmap Player < Entity
 
 		if(!GetAdminFlag(this.adminid, Admin_Custom6, Access_Effective))
 			this.vip = false;
+
+		int iIndex = g_adtVips.FindValue(this.index);
+
+		if(this.vip && iIndex == -1)
+		{
+			g_adtVips.Push(this.index);
+		}
+		else if(!this.vip && iIndex != -1)
+		{
+			g_adtVips.Erase(iIndex);
+		}
 	}
 
 	public void VIPMenu()
@@ -223,6 +237,9 @@ methodmap Player < Entity
 
 	public void OpenMenuCmd()
 	{
+		if(g_iRound < g_pRound.IntValue)
+			return;
+
 		//Check if other menu disturbed player to choose weapon
 		if(!this.disturbed)
 			return;
@@ -233,7 +250,7 @@ methodmap Player < Entity
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
-			this.InfoChat(TextBuyTimeExp);
+			this.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		//If everything's ok we show menu
@@ -251,6 +268,28 @@ methodmap Player < Entity
 		kv.SetString("msg", msg);
 		ShowVGUIPanel(this.index, "info", kv);
 		delete kv;
+	}
+
+	public void PrintVips()
+	{
+		static char szText[192];
+		static char szName[MAX_NAME_LENGTH];
+		int iLen;
+		Player client;
+
+		iLen = strcopy(szText, sizeof(szText), "VIPy Online: ");
+
+		for(int i=0; i<g_adtVips.Length; i++)
+		{
+			client = Player(g_adtVips.Get(i));
+			client.GetName(szName, sizeof(szName));
+
+			if(!(i+1 == g_adtVips.Length))
+				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01,", szName);
+			else
+				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
+		}
+		this.PrintChat(szText);
 	}
 };
 

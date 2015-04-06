@@ -77,15 +77,9 @@ UserMsg g_hWarmupEnded;
 
 bool g_bSayText2Hooked;
 
-/* End Global variables */
+ArrayList g_adtVips;
 
-/* Enums */
-enum
-{
-	TextInterrupted = 0,
-	TextBuyTimeExp
-}
-/* End Enums */
+/* End Global variables */
 
 #include <vip/mtd_maps>
 
@@ -155,6 +149,11 @@ public void OnPluginStart()
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
+	RegConsoleCmd("vip", ShowVipInfo, "Shows MOTD about VIP");
+	RegConsoleCmd("vips", ShowVipsOnServer, "Shows VIPs on server");
+	RegAdminCmd("menuv", ReopenVipMenu, ADMFLAG_CUSTOM6, "Reopens vip menu");
+
+	g_adtVips = new ArrayList(1);
 
 	//VIP prefix
 	g_hSayText2 = GetUserMessageId("SayText2");
@@ -323,25 +322,28 @@ public Action VipInfoConsole(int client, int args)
 	return Plugin_Handled;
 }
 
-public Action OnClientSayCommand(int client, const char[] command, const char[] sArgs)
+public Action ShowVipInfo(int client, int args)
 {
-	if(sArgs[0] == '/' || sArgs[0] == '!')
-	{
-		Player player_client = Player(client);
-		//Re-enable vip menu
-		else if(!strcmp(sArgs[1], "menuv", false) && g_iRound >= g_pRound.IntValue)
-		{
-			player_client.OpenMenuCmd();
-			return Plugin_Handled;
-		}
+	Player player_client = Player(client);
 
-		else if(!strcmp(sArgs[1], "vip", false))
-		{
-			player_client.ShowMOTD("Informacje o VIP", g_szUrlMotd, MOTDPANEL_TYPE_URL);
-			return Plugin_Handled;
-		}
-	}
-	return Plugin_Continue;
+	player_client.ShowMOTD("Informacje o VIP", g_szUrlMotd, MOTDPANEL_TYPE_URL);
+	return Plugin_Handled;
+}
+
+public Action ReopenVipMenu(int client, int args)
+{
+	Player player_client = Player(client);
+
+	player_client.OpenMenuCmd();
+	return Plugin_Handled;
+}
+
+public Action ShowVipsOnServer(int client, int args)
+{
+	Player player_client = Player(client);
+	
+	player_client.PrintVips();
+	return Plugin_Handled;
 }
 
 public void BuyTime_Ended(Event event, const char[] name, bool dontBroadcast)
@@ -385,7 +387,7 @@ public void OnConfigsExecuted()
 
 public Action TimerVipInfo(Handle timer)
 {
-	PrintToChatAll("\x01[VIP]\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
+	PrintChatAll("\x01[VIP]\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
 }
 
 //Load client's preferences
@@ -409,7 +411,7 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		client.primary_weapon = param2;
@@ -430,10 +432,10 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.InfoChat(TextBuyTimeExp);
+				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 				return;
 			}
-			client.InfoChat(TextInterrupted);
+			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -447,7 +449,7 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		client.secondary_weapon = param2;
@@ -469,10 +471,10 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.InfoChat(TextBuyTimeExp);
+				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 				return;
 			}
-			client.InfoChat(TextInterrupted);
+			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -506,7 +508,7 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
 		if(param2 == 1)
@@ -559,10 +561,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
-			client.InfoChat(TextBuyTimeExp);
+			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
-		client.InfoChat(TextInterrupted);
+		client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 		client.disturbed = true;
 	}
 }
@@ -576,7 +578,7 @@ public void OnClientPostAdminCheck(int client)
 		client_pl.VipUpdate();
 		if(!client_pl.vip)
 			return;
-			
+		
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;
@@ -631,6 +633,21 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
 		g_iRound = 0;
 	}
 	return Plugin_Continue;
+}
+
+public void PrintChatAll(char[] text, any ...)
+{
+	static char szText[192];
+	Player client;
+
+	for(int i=1; i<=MaxClients; i++)
+	{	
+		SetGlobalTransTarget(i);
+		VFormat(szText, sizeof(szText), text, 2);
+
+		client = Player(i);
+		client.PrintChat(szText);
+	}
 }
 
 public void OnPluginEnd()
