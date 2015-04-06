@@ -155,6 +155,8 @@ public void OnPluginStart()
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
+	RegConsoleCmd("vip", ShowVipInfo, "Shows MOTD about VIP");
+	RegAdminCmd("menuv", ReopenVipMenu, ADMFLAG_CUSTOM6, "Reopens vip menu");
 
 	//VIP prefix
 	g_hSayText2 = GetUserMessageId("SayText2");
@@ -323,25 +325,23 @@ public Action VipInfoConsole(int client, int args)
 	return Plugin_Handled;
 }
 
-public Action OnClientSayCommand(int client, const char[] command, const char[] sArgs)
+public Action ShowVipInfo(int client, int args)
 {
-	if(sArgs[0] == '/' || sArgs[0] == '!')
-	{
-		Player player_client = Player(client);
-		//Re-enable vip menu
-		else if(!strcmp(sArgs[1], "menuv", false) && g_iRound >= g_pRound.IntValue)
-		{
-			player_client.OpenMenuCmd();
-			return Plugin_Handled;
-		}
+	Player player_client = Player(client);
 
-		else if(!strcmp(sArgs[1], "vip", false))
-		{
-			player_client.ShowMOTD("Informacje o VIP", g_szUrlMotd, MOTDPANEL_TYPE_URL);
-			return Plugin_Handled;
-		}
-	}
-	return Plugin_Continue;
+	player_client.ShowMOTD("Informacje o VIP", g_szUrlMotd, MOTDPANEL_TYPE_URL);
+	return Plugin_Handled;
+}
+
+public Action ReopenVipMenu(int client, int args)
+{
+	if(g_iRound < g_pRound.IntValue)
+		return Plugin_Handled;
+
+	Player player_client = Player(client);
+
+	player_client.OpenMenuCmd();
+	return Plugin_Handled;
 }
 
 public void BuyTime_Ended(Event event, const char[] name, bool dontBroadcast)
