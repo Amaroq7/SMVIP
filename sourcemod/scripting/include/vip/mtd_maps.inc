@@ -162,10 +162,6 @@ methodmap Player < Entity
 		SetClientCookie(this.index, cookie, value);
 	}
 
-	public void PrintChatPluginInfo()
-	{
-		PrintToChat(this.index, "\x01[VIP] \x04Plugin\x02 %s \x04stworzony przez\x02 %s\x04. Obecna wersja \x02 %s\x04.", szPlugin, szAuthor, szVersion);
-	}
 	public void PrintPluginInfoReplyToConsole()
 	{
 		if(GetCmdReplySource() != SM_REPLY_TO_CONSOLE)

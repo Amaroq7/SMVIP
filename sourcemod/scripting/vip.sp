@@ -328,12 +328,6 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
 	if(sArgs[0] == '/' || sArgs[0] == '!')
 	{
 		Player player_client = Player(client);
-		//Info about plugin in chat
-		if(!strcmp(sArgs[1], "vip_release", false))
-		{
-			player_client.PrintChatPluginInfo();
-			return Plugin_Handled;
-		}
 		//Re-enable vip menu
 		else if(!strcmp(sArgs[1], "menuv", false) && g_iRound >= g_pRound.IntValue)
 		{
