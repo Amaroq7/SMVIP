@@ -582,7 +582,7 @@ public void OnClientPostAdminCheck(int client)
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;
-		PrintToChatAll("\x01[VIP]\x01 Na serwer wbił VIP\x10 %s\x01.", szName);
+		PrintChatAll("\x01[VIP]\x01 Na serwer wbił VIP\x10 %s\x01.", szName);
 	}
 }
 
