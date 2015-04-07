@@ -49,14 +49,6 @@ methodmap Player < Entity
 		}
 	}
 
-	property AdminId adminid
-	{
-		public get()
-		{
-			return GetUserAdmin(this.index);
-		}
-	}
-
 	property bool disturbed
 	{
 		public get()
@@ -114,6 +106,14 @@ methodmap Player < Entity
 		public set(int team)
 		{
 			CS_SwitchTeam(this.index, team);
+		}
+	}
+
+	property int flags
+	{
+		public get()
+		{
+			return GetUserFlagBits(this.index);
 		}
 	}
 
@@ -183,22 +183,26 @@ methodmap Player < Entity
 	{
 		this.vip = true;
 
-		if(this.adminid == INVALID_ADMIN_ID)
-			this.vip = false;
+		int iFlags = this.flags;
 
-		if(!GetAdminFlag(this.adminid, Admin_Custom6, Access_Effective))
+		if(!iFlags)
 			this.vip = false;
+		else
+		{
+			static char szFlag[2];
+			g_pFlag.GetString(szFlag, sizeof(szFlag));
+
+			if(!(iFlags & ReadFlagString(szFlag)) || !(iFlags & ADMFLAG_ROOT))
+				this.vip = false;
+		}
 
 		int iIndex = g_adtVips.FindValue(this.index);
 
 		if(this.vip && iIndex == -1)
-		{
 			g_adtVips.Push(this.index);
-		}
+
 		else if(!this.vip && iIndex != -1)
-		{
 			g_adtVips.Erase(iIndex);
-		}
 	}
 
 	public void VIPMenu()

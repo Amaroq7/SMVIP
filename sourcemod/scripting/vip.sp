@@ -64,6 +64,7 @@ ConVar g_pRound;
 ConVar g_pPrefix;
 ConVar g_pTimer;
 ConVar g_pReservation;
+ConVar g_pFlag;
 
 Menu g_hWeaponsMenuPrimary;
 Menu g_hWeaponsMenuSecondary;
@@ -124,6 +125,7 @@ public void OnPluginStart()
 	g_pPrefix = CreateConVar("sm_vip_prefix", "1", "Enables vip prefix in chat", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_pTimer = CreateConVar("sm_vip_msg", "60", "Time in seconds when the info is displayed to the players", FCVAR_PLUGIN, true, 0.0, false);
 	g_pReservation = CreateConVar("sm_vip_reservation", "1", "Defines that vip has a reservation slot (info only for motd)", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_pFlag = CreateConVar("sm_vip_flag", "t", "Defines flag for VIP privileges", FCVAR_NONE);
 
 	AutoExecConfig(true, "vip");
 
@@ -136,6 +138,7 @@ public void OnPluginStart()
 	g_pRound.AddChangeHook(ConChanged);
 	g_pPrefix.AddChangeHook(ConChanged);
 	g_pReservation.AddChangeHook(ConChanged);
+	g_pFlags.AddChangeHook(ConChanged);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
@@ -174,61 +177,78 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	static char szName[10];
+	if(convar != g_pFlags)
+	{
+		static char szName[10];
 	
-	if(convar == g_pAddHP)
-	{
-		strcopy(szName, sizeof(szName), "hp");
-	}
-	else if(convar == g_pArmorValue)
-	{
-		strcopy(szName, sizeof(szName), "armor");
-	}
-	else if(convar == g_pHelmet)
-	{
-		strcopy(szName, sizeof(szName), "helmet");
-	}
-	else if(convar == g_pMoney)
-	{
-		strcopy(szName, sizeof(szName), "money");
-	}
-	else if(convar == g_pDefuser)
-	{
-		strcopy(szName, sizeof(szName), "def");
-	}
-	else if(convar == g_pTaser)
-	{
-		strcopy(szName, sizeof(szName), "taser");
-	}
-	else if(convar == g_pRound)
-	{
-		strcopy(szName, sizeof(szName), "menu");
-	}
-	else if(convar == g_pPrefix)
-	{
-		strcopy(szName, sizeof(szName), "prefix");
-		int iNewValue = StringToInt(newValue);
-		//int iOldValue = StringToInt(oldValue);
-		if(iNewValue == 1)
-		{	
-			if(!g_bSayText2Hooked)
-			{
-				HookUserMessage(g_hSayText2, SayText2_Hook, true);
-				g_bSayText2Hooked = true;
+		if(convar == g_pAddHP)
+		{
+			strcopy(szName, sizeof(szName), "hp");
+		}
+		else if(convar == g_pArmorValue)
+		{
+			strcopy(szName, sizeof(szName), "armor");
+		}
+		else if(convar == g_pHelmet)
+		{
+			strcopy(szName, sizeof(szName), "helmet");
+		}
+		else if(convar == g_pMoney)
+		{
+			strcopy(szName, sizeof(szName), "money");
+		}
+		else if(convar == g_pDefuser)
+		{
+			strcopy(szName, sizeof(szName), "def");
+		}
+		else if(convar == g_pTaser)
+		{
+			strcopy(szName, sizeof(szName), "taser");
+		}
+		else if(convar == g_pRound)
+		{
+			strcopy(szName, sizeof(szName), "menu");
+		}
+		else if(convar == g_pPrefix)
+		{
+			strcopy(szName, sizeof(szName), "prefix");
+			int iNewValue = StringToInt(newValue);
+			//int iOldValue = StringToInt(oldValue);
+			if(iNewValue == 1)
+			{	
+				if(!g_bSayText2Hooked)
+				{
+					HookUserMessage(g_hSayText2, SayText2_Hook, true);
+					g_bSayText2Hooked = true;
+				}
 			}
+			else
+			{
+				UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
+				g_bSayText2Hooked = false;
+			}
+		}
+		else if(convar == g_pReservation)
+		{
+			strcopy(szName, sizeof(szName), "res");
+		}
+		
+		BuildUrl(szName, oldValue, newValue, convar);
+	}
+	else
+	{
+		static bool bOverrided;
+		if(bOverrided)
+		{
+			UnsetCommandOverride("menuv", Override_Command);
+			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
 		}
 		else
 		{
-			UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
-			g_bSayText2Hooked = false;
+			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
+			bOverrided = true;
 		}
 	}
-	else if(convar == g_pReservation)
-	{
-		strcopy(szName, sizeof(szName), "res");
-	}
-		
-	BuildUrl(szName, oldValue, newValue, convar);
 }
 
 public void BuildUrl(const char[] unique_name, const char[] oldValue, const char[] newValue, ConVar changed)
