@@ -488,12 +488,8 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 	for(int i=1; i <= MaxClients; i++)
 	{
 		Player client = Player(i);
-		if(client.IsConnected() && client.IsAlive())
-		{
+		if(client.IsConnected())
 			client.VipUpdate();
-			if(client.vip && g_iRound >= g_pRound.IntValue)
-				client.VIPMenu();
-		}
 	}
 }
 
@@ -622,6 +618,9 @@ public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 
 		if(g_pTaser.BoolValue)
 			client_pl.GiveItem("weapon_taser");
+
+		if(g_iRound >= g_pRound.IntValue)
+			client_pl.VIPMenu();
 	}
 }
 
