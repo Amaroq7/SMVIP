@@ -176,7 +176,6 @@ methodmap Player < Entity
 		
 		SetGlobalTransTarget(this.index);
 		VFormat(szText, sizeof(szText), text, 2);
-		
 		PrintToChat(this.index, szText);
 	}
 
@@ -279,16 +278,22 @@ methodmap Player < Entity
 
 		iLen = strcopy(szText, sizeof(szText), "VIPy Online: ");
 
-		for(int i=0; i<g_adtVips.Length; i++)
+		if(g_adtVips.Length)
 		{
-			client = Player(g_adtVips.Get(i));
-			client.GetName(szName, sizeof(szName));
+			for(int i=0; i<g_adtVips.Length; i++)
+			{
+				client = Player(g_adtVips.Get(i));
+				client.GetName(szName, sizeof(szName));
 
-			if(!(i+1 == g_adtVips.Length))
-				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01,", szName);
-			else
-				iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
+				if(!(i+1 == g_adtVips.Length))
+					iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01,", szName);
+				else
+					iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
+			}
 		}
+		else
+			strcopy(szText[iLen], sizeof(szText)-iLen, "\x02Brak VIPów Online\x01.");
+
 		this.PrintChat(szText);
 	}
 };
