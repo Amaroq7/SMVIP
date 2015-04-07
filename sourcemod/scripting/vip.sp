@@ -642,6 +642,9 @@ public void PrintChatAll(char[] text, any ...)
 
 	for(int i=1; i<=MaxClients; i++)
 	{	
+		if(!IsClientInGame(i))
+			continue;
+
 		SetGlobalTransTarget(i);
 		VFormat(szText, sizeof(szText), text, 2);
 
