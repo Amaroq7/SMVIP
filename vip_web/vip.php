@@ -93,8 +93,7 @@ if($reservation)
 	$reservation_text = '<h2><num>'.++$number.'.</num> Rezerwacja slota na serwerze.</h2><br />';
 }
 //0.1.4
-
-$version_text = '<p2>Plugin stworzony przez <a href="https://github.com/Ni3znajomy">Ni3znajomy</a>. Wersja pluginu <a href="changelog.txt">'.decode_plugin_version($version).'</a>. Plugin opublikowany na licencji <a href="GPLv3.txt">GNU General Public License version 3</a>.</p2>';
+$version_text = '<p2>Plugin stworzony przez <a href="https://github.com/Ni3znajomy">Ni3znajomy</a>. Wersja pluginu <a href="https://github.com/Ni3znajomy/vip_csgo/blob/master/vip_web/changelog.txt">'.decode_plugin_version($version).'</a>. Plugin opublikowany na licencji <a href="https://github.com/Ni3znajomy/vip_csgo/blob/master/LICENSE">GNU General Public License version 3</a>.</p2>';
 
 $html = $html_header.$html_title.$armor_text.$money_text.$hp_text.$def_text.$taser_text.$menu_text.$prefix_text.$reservation_text;
 
