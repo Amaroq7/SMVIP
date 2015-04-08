@@ -138,7 +138,7 @@ public void OnPluginStart()
 	g_pRound.AddChangeHook(ConChanged);
 	g_pPrefix.AddChangeHook(ConChanged);
 	g_pReservation.AddChangeHook(ConChanged);
-	g_pFlags.AddChangeHook(ConChanged);
+	g_pFlag.AddChangeHook(ConChanged);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
@@ -177,7 +177,7 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if(convar != g_pFlags)
+	if(convar != g_pFlag)
 	{
 		static char szName[10];
 	
