@@ -145,7 +145,7 @@ public void OnPluginStart()
 	HookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	HookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	HookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
-	HookEvent("player_spawned", PlayerSpawned, EventHookMode_Post);
+	HookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
@@ -488,12 +488,8 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 	for(int i=1; i <= MaxClients; i++)
 	{
 		Player client = Player(i);
-		if(client.IsConnected() && client.IsAlive())
-		{
+		if(client.IsConnected())
 			client.VipUpdate();
-			if(client.vip && g_iRound >= g_pRound.IntValue)
-				client.VIPMenu();
-		}
 	}
 }
 
@@ -596,10 +592,10 @@ public void OnClientDisconnect(int client)
 	}
 }
 
-public void PlayerSpawned(Event event, const char[] name, bool dontBroadcast)
+public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
 	Player client_pl = Player(GetClientOfUserId(event.GetInt("userid")));
-	if(client_pl.vip && client_pl.IsAlive() && !event.GetBool("inrestart"))
+	if(client_pl.vip && client_pl.IsAlive())
 	{
 		client_pl.SetProp(Prop_Send, "m_iHealth", client_pl.GetProp(Prop_Send, "m_iHealth")+g_pAddHP.IntValue);
 
@@ -622,6 +618,9 @@ public void PlayerSpawned(Event event, const char[] name, bool dontBroadcast)
 
 		if(g_pTaser.BoolValue)
 			client_pl.GiveItem("weapon_taser");
+
+		if(g_iRound >= g_pRound.IntValue)
+			client_pl.VIPMenu();
 	}
 }
 
@@ -673,6 +672,6 @@ public void OnPluginEnd()
 	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
-	UnhookEvent("player_spawned", PlayerSpawned, EventHookMode_Post);
+	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
 }
