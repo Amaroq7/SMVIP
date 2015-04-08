@@ -508,7 +508,7 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 	for(int i=1; i <= MaxClients; i++)
 	{
 		Player client = Player(i);
-		if(client.IsConnected())
+		if(client.connected)
 			client.VipUpdate();
 	}
 }
@@ -517,10 +517,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 {
 	Player client = Player(param1);
 
-	if(!client.IsConnected())
+	if(!client.in_game)
 		return;
 	
-	if(action == MenuAction_Select && client.IsAlive())
+	if(action == MenuAction_Select && client.alive)
 	{
 		if(g_bBuyTimeExpired)
 		{
@@ -589,7 +589,7 @@ public void OnClientPostAdminCheck(int client)
 {
 	Player client_pl = Player(client);
 
-	if(!client_pl.IsFake() && client_pl.IsConnected())
+	if(!client_pl.fake && client_pl.connected)
 	{
 		client_pl.VipUpdate();
 		if(!client_pl.vip)
@@ -615,7 +615,7 @@ public void OnClientDisconnect(int client)
 public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
 	Player client_pl = Player(GetClientOfUserId(event.GetInt("userid")));
-	if(client_pl.vip && client_pl.IsAlive())
+	if(client_pl.vip && client_pl.alive)
 	{
 		client_pl.SetProp(Prop_Send, "m_iHealth", client_pl.GetProp(Prop_Send, "m_iHealth")+g_pAddHP.IntValue);
 
