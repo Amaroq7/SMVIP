@@ -117,19 +117,36 @@ methodmap Player < Entity
 		}
 	}
 
-	public int IsConnected()
+	property bool connected
 	{
-		return IsClientInGame(this.index);
+		public get()
+		{
+			return IsClientConnected(this.index);
+		}
 	}
 
-	public int IsAlive()
+	property bool in_game
 	{
-		return IsPlayerAlive(this.index);
+		public get()
+		{
+			return IsClientInGame(this.index);
+		}
 	}
 
-	public int IsFake()
+	property bool alive
 	{
-		return IsFakeClient(this.index);
+		public get()
+		{
+			return IsPlayerAlive(this.index);
+		}
+	}
+
+	property bool fake
+	{
+		public get()
+		{
+			return IsFakeClient(this.index);
+		}
 	}
 
 	public bool GetName(char[] name, int maxlen)
