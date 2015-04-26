@@ -448,9 +448,13 @@ public void OnClientCookiesCached(int client)
 
 public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int param2)
 {
-	Player client = Player(param1);
 	if(action == MenuAction_Select)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game)
+			return;
+
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
@@ -466,6 +470,11 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 	}
 	else if(action == MenuAction_Cancel)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game)
+			return;
+
 		if(param2 == MenuCancel_ExitBack)
 			client.VIPMenu();
 
@@ -485,10 +494,13 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 
 public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int param2)
 {
-	Player client = Player(param1);
-
 	if(action == MenuAction_Select)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game)
+			return;
+
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
@@ -505,6 +517,11 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 	}
 	else if(action == MenuAction_Cancel)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game)
+			return;
+
 		if(param2 == MenuCancel_ExitBack)
 			client.VIPMenu();
 
@@ -537,13 +554,13 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 
 public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	Player client = Player(param1);
-
-	if(!client.in_game)
-		return;
-	
-	if(action == MenuAction_Select && client.alive)
+	if(action == MenuAction_Select)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game || !client.alive)
+			return;
+
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
@@ -596,6 +613,11 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 	}
 	else if(action == MenuAction_Cancel && param2 == MenuCancel_Interrupted)
 	{
+		Player client = Player(param1);
+
+		if(!client.in_game)
+			return;
+
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
