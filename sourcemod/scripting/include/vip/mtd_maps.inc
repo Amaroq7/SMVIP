@@ -193,7 +193,7 @@ methodmap Player < Entity
 		
 		SetGlobalTransTarget(this.index);
 		VFormat(szText, sizeof(szText), text, 2);
-		PrintToChat(this.index, szText);
+		PrintToChat(this.index, "\x01[VIP] %s", szText);
 	}
 
 	public void VipUpdate()
