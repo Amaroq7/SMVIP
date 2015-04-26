@@ -140,8 +140,9 @@ public void OnPluginStart()
 	g_pRound.AddChangeHook(ConChanged);
 	g_pPrefix.AddChangeHook(ConChanged);
 	g_pReservation.AddChangeHook(ConChanged);
-	g_pFlag.AddChangeHook(ConChanged);
 
+
+	g_pFlag.AddChangeHook(PluginConvar);
 	g_pTimer.AddChangeHook(InfoTimerChanged);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
@@ -179,6 +180,24 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 	return Plugin_Continue;
 }
 
+public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newValue)
+{
+	if(convar == g_pFlag)
+	{
+		static bool bOverrided;
+		if(bOverrided)
+		{
+			UnsetCommandOverride("menuv", Override_Command);
+			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
+		}
+		else
+		{
+			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
+			bOverrided = true;
+		}
+	}
+}
+
 public void InfoTimerChanged(ConVar convar, const char[] oldValue, const char[] newValue)
 {
 	int iOldValue = StringToInt(oldValue);
@@ -193,78 +212,61 @@ public void InfoTimerChanged(ConVar convar, const char[] oldValue, const char[] 
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if(convar != g_pFlag)
-	{
-		static char szName[10];
+	static char szName[10];
 	
-		if(convar == g_pAddHP)
-		{
-			strcopy(szName, sizeof(szName), "hp");
-		}
-		else if(convar == g_pArmorValue)
-		{
-			strcopy(szName, sizeof(szName), "armor");
-		}
-		else if(convar == g_pHelmet)
-		{
-			strcopy(szName, sizeof(szName), "helmet");
-		}
-		else if(convar == g_pMoney)
-		{
-			strcopy(szName, sizeof(szName), "money");
-		}
-		else if(convar == g_pDefuser)
-		{
-			strcopy(szName, sizeof(szName), "def");
-		}
-		else if(convar == g_pTaser)
-		{
-			strcopy(szName, sizeof(szName), "taser");
-		}
-		else if(convar == g_pRound)
-		{
-			strcopy(szName, sizeof(szName), "menu");
-		}
-		else if(convar == g_pPrefix)
-		{
-			strcopy(szName, sizeof(szName), "prefix");
-			int iNewValue = StringToInt(newValue);
-			//int iOldValue = StringToInt(oldValue);
-			if(iNewValue == 1)
-			{	
-				if(!g_bSayText2Hooked)
-				{
-					HookUserMessage(g_hSayText2, SayText2_Hook, true);
-					g_bSayText2Hooked = true;
-				}
-			}
-			else
-			{
-				UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
-				g_bSayText2Hooked = false;
-			}
-		}
-		else if(convar == g_pReservation)
-		{
-			strcopy(szName, sizeof(szName), "res");
-		}
-		
-		BuildUrl(szName, oldValue, newValue, convar);
-	}
-	else
+	if(convar == g_pAddHP)
 	{
-		static bool bOverrided;
-		if(bOverrided)
-		{
-			UnsetCommandOverride("menuv", Override_Command);
-			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
+		strcopy(szName, sizeof(szName), "hp");
+	}
+	else if(convar == g_pArmorValue)
+	{
+		strcopy(szName, sizeof(szName), "armor");
+	}
+	else if(convar == g_pHelmet)
+	{
+		strcopy(szName, sizeof(szName), "helmet");
+	}
+	else if(convar == g_pMoney)
+	{
+		strcopy(szName, sizeof(szName), "money");
+	}
+	else if(convar == g_pDefuser)
+	{
+		strcopy(szName, sizeof(szName), "def");
+	}
+	else if(convar == g_pTaser)
+	{
+		strcopy(szName, sizeof(szName), "taser");
+	}
+	else if(convar == g_pRound)
+	{
+		strcopy(szName, sizeof(szName), "menu");
+	}
+	else if(convar == g_pPrefix)
+	{
+		strcopy(szName, sizeof(szName), "prefix");
+		int iNewValue = StringToInt(newValue);
+		//int iOldValue = StringToInt(oldValue);
+		if(iNewValue == 1)
+		{	
+			if(!g_bSayText2Hooked)
+			{
+				HookUserMessage(g_hSayText2, SayText2_Hook, true);
+				g_bSayText2Hooked = true;
+			}
 		}
 		else
 		{
-			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
-			bOverrided = true;
+			UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
+			g_bSayText2Hooked = false;
 		}
 	}
+	else if(convar == g_pReservation)
+	{
+		strcopy(szName, sizeof(szName), "res");
+	}
+		
+	BuildUrl(szName, oldValue, newValue, convar);
 }
 
 public void BuildUrl(const char[] unique_name, const char[] oldValue, const char[] newValue, ConVar changed)
