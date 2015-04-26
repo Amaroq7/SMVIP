@@ -141,9 +141,8 @@ public void OnPluginStart()
 	g_pPrefix.AddChangeHook(ConChanged);
 	g_pReservation.AddChangeHook(ConChanged);
 
-
 	g_pFlag.AddChangeHook(PluginConvar);
-	g_pTimer.AddChangeHook(InfoTimerChanged);
+	g_pTimer.AddChangeHook(PluginConvar);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
@@ -196,18 +195,17 @@ public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newV
 			bOverrided = true;
 		}
 	}
-}
+	else if(convar == g_pTimer)
+	{
+		int iOldValue = StringToInt(oldValue);
+		int iNewValue = StringToInt(newValue);
 
-public void InfoTimerChanged(ConVar convar, const char[] oldValue, const char[] newValue)
-{
-	int iOldValue = StringToInt(oldValue);
-	int iNewValue = StringToInt(newValue);
-
-	if(iOldValue > 0 && iNewValue <= 0)
-		KillTimer(g_hTimerInfo);
+		if(iOldValue > 0 && iNewValue <= 0)
+			KillTimer(g_hTimerInfo);
 	
-	else if(iOldValue <= 0 && iNewValue > 0)
-		g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+		else if(iOldValue <= 0 && iNewValue > 0)
+			g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	}
 }
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
