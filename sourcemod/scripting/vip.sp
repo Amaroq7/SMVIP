@@ -131,15 +131,15 @@ public void OnPluginStart()
 
 	AutoExecConfig(true, "vip");
 
-	g_pAddHP.AddChangeHook(ConChanged);
-	g_pArmorValue.AddChangeHook(ConChanged);
-	g_pHelmet.AddChangeHook(ConChanged);
-	g_pMoney.AddChangeHook(ConChanged);
-	g_pDefuser.AddChangeHook(ConChanged);
-	g_pTaser.AddChangeHook(ConChanged);
-	g_pRound.AddChangeHook(ConChanged);
-	g_pPrefix.AddChangeHook(ConChanged);
-	g_pReservation.AddChangeHook(ConChanged);
+	g_pAddHP.AddChangeHook(WebConvar);
+	g_pArmorValue.AddChangeHook(WebConvar);
+	g_pHelmet.AddChangeHook(WebConvar);
+	g_pMoney.AddChangeHook(WebConvar);
+	g_pDefuser.AddChangeHook(WebConvar);
+	g_pTaser.AddChangeHook(WebConvar);
+	g_pRound.AddChangeHook(WebConvar);
+	g_pPrefix.AddChangeHook(WebConvar);
+	g_pReservation.AddChangeHook(WebConvar);
 
 	g_pFlag.AddChangeHook(PluginConvar);
 	g_pTimer.AddChangeHook(PluginConvar);
@@ -225,7 +225,7 @@ public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newV
 	}
 }
 
-public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
+public void WebConvar(ConVar convar, const char[] oldValue, const char[] newValue)
 {
 	static char szName[10];
 	
