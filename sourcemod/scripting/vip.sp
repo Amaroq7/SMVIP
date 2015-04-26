@@ -269,10 +269,10 @@ public void WebConvar(ConVar convar, const char[] oldValue, const char[] newValu
 		strcopy(szName, sizeof(szName), "res");
 	}
 		
-	BuildUrl(szName, oldValue, newValue, convar);
+	BuildUrl(convar, szName, oldValue, newValue);
 }
 
-public void BuildUrl(const char[] unique_name, const char[] oldValue, const char[] newValue, ConVar changed)
+void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[] oldValue = "", const char[] newValue = "")
 {
 	//g_szUrlMotd[] = { "http://localhost/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
 	
@@ -415,7 +415,7 @@ public void OnConfigsExecuted()
 	g_hWeaponsMenuPrimary.ExitButton = false;
 	g_hWeaponsMenuSecondary.ExitButton = false;
 
-	BuildUrl("", "", "", null);
+	BuildUrl();
 
 	if(g_pPrefix.BoolValue && !g_bSayText2Hooked)
 	{
