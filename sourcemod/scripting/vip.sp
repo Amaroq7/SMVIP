@@ -206,6 +206,23 @@ public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newV
 		else if(iOldValue <= 0 && iNewValue > 0)
 			g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 	}
+	else if(convar == g_pPrefix)
+	{
+		int iNewValue = StringToInt(newValue);
+		if(iNewValue == 1)
+		{	
+			if(!g_bSayText2Hooked)
+			{
+				HookUserMessage(g_hSayText2, SayText2_Hook, true);
+				g_bSayText2Hooked = true;
+			}
+		}
+		else
+		{
+			UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
+			g_bSayText2Hooked = false;
+		}
+	}
 }
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -243,21 +260,9 @@ public void ConChanged(ConVar convar, const char[] oldValue, const char[] newVal
 	else if(convar == g_pPrefix)
 	{
 		strcopy(szName, sizeof(szName), "prefix");
-		int iNewValue = StringToInt(newValue);
-		//int iOldValue = StringToInt(oldValue);
-		if(iNewValue == 1)
-		{	
-			if(!g_bSayText2Hooked)
-			{
-				HookUserMessage(g_hSayText2, SayText2_Hook, true);
-				g_bSayText2Hooked = true;
-			}
-		}
-		else
-		{
-			UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
-			g_bSayText2Hooked = false;
-		}
+
+		//Go to plugin cvar hooks
+		PluginConvar(convar, oldValue, newValue);
 	}
 	else if(convar == g_pReservation)
 	{
