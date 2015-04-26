@@ -407,7 +407,7 @@ public void OnConfigsExecuted()
 
 public Action TimerVipInfo(Handle timer)
 {
-	PrintChatAll("\x01[VIP]\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
+	PrintChatAll("\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
 }
 
 //Load client's preferences
@@ -431,7 +431,7 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
 		client.primary_weapon = param2;
@@ -452,10 +452,10 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
-			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -469,7 +469,7 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
 		client.secondary_weapon = param2;
@@ -491,10 +491,10 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
-				client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
-			client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
 	}
@@ -524,7 +524,7 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 	{
 		if(g_bBuyTimeExpired)
 		{
-			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
 		if(param2 == 1)
@@ -577,10 +577,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
-			client.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
+			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
-		client.PrintChat("\x01[VIP] \x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+		client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 		client.disturbed = true;
 	}
 }
@@ -598,7 +598,7 @@ public void OnClientPostAdminCheck(int client)
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;
-		PrintChatAll("\x01[VIP]\x01 Na serwer wbił VIP\x10 %s\x01.", szName);
+		PrintChatAll("Na serwer wbił VIP\x10 %s\x01.", szName);
 	}
 }
 
@@ -661,13 +661,14 @@ public void PrintChatAll(char[] text, any ...)
 
 	for(int i=1; i<=MaxClients; i++)
 	{	
-		if(!IsClientInGame(i))
+		client = Player(i);
+
+		if(!client.in_game)
 			continue;
 
-		SetGlobalTransTarget(i);
+		SetGlobalTransTarget(client.index);
 		VFormat(szText, sizeof(szText), text, 2);
 
-		client = Player(i);
 		client.PrintChat(szText);
 	}
 }
