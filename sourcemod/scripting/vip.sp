@@ -80,6 +80,8 @@ bool g_bSayText2Hooked;
 
 ArrayList g_adtVips;
 
+Handle g_hTimerInfo;
+
 /* End Global variables */
 
 #include <vip/mtd_maps>
@@ -140,6 +142,8 @@ public void OnPluginStart()
 	g_pReservation.AddChangeHook(ConChanged);
 	g_pFlag.AddChangeHook(ConChanged);
 
+	g_pTimer.AddChangeHook(InfoTimerChanged);
+
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
 
@@ -173,6 +177,18 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 		event.BroadcastDisabled = true;
 
 	return Plugin_Continue;
+}
+
+public void InfoTimerChanged(ConVar convar, const char[] oldValue, const char[] newValue)
+{
+	int iOldValue = StringToInt(oldValue);
+	int iNewValue = StringToInt(newValue);
+
+	if(iOldValue > 0 && iNewValue <= 0)
+		KillTimer(g_hTimerInfo);
+	
+	else if(iOldValue <= 0 && iNewValue > 0)
+		g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 }
 
 public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -402,7 +418,8 @@ public void OnConfigsExecuted()
 		g_bSayText2Hooked = true;
 	}
 
-	CreateTimer(g_pTimer.FloatValue, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	if(g_pTimer.IntValue > 0)
+		g_hTimerInfo = CreateTimer(g_pTimer.FloatValue, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 }
 
 public Action TimerVipInfo(Handle timer)
