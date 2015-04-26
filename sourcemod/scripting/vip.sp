@@ -131,18 +131,18 @@ public void OnPluginStart()
 
 	AutoExecConfig(true, "vip");
 
-	g_pAddHP.AddChangeHook(ConChanged);
-	g_pArmorValue.AddChangeHook(ConChanged);
-	g_pHelmet.AddChangeHook(ConChanged);
-	g_pMoney.AddChangeHook(ConChanged);
-	g_pDefuser.AddChangeHook(ConChanged);
-	g_pTaser.AddChangeHook(ConChanged);
-	g_pRound.AddChangeHook(ConChanged);
-	g_pPrefix.AddChangeHook(ConChanged);
-	g_pReservation.AddChangeHook(ConChanged);
-	g_pFlag.AddChangeHook(ConChanged);
+	g_pAddHP.AddChangeHook(WebConvar);
+	g_pArmorValue.AddChangeHook(WebConvar);
+	g_pHelmet.AddChangeHook(WebConvar);
+	g_pMoney.AddChangeHook(WebConvar);
+	g_pDefuser.AddChangeHook(WebConvar);
+	g_pTaser.AddChangeHook(WebConvar);
+	g_pRound.AddChangeHook(WebConvar);
+	g_pPrefix.AddChangeHook(WebConvar);
+	g_pReservation.AddChangeHook(WebConvar);
 
-	g_pTimer.AddChangeHook(InfoTimerChanged);
+	g_pFlag.AddChangeHook(PluginConvar);
+	g_pTimer.AddChangeHook(PluginConvar);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
@@ -179,79 +179,9 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 	return Plugin_Continue;
 }
 
-public void InfoTimerChanged(ConVar convar, const char[] oldValue, const char[] newValue)
+public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	int iOldValue = StringToInt(oldValue);
-	int iNewValue = StringToInt(newValue);
-
-	if(iOldValue > 0 && iNewValue <= 0)
-		KillTimer(g_hTimerInfo);
-	
-	else if(iOldValue <= 0 && iNewValue > 0)
-		g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-}
-
-public void ConChanged(ConVar convar, const char[] oldValue, const char[] newValue)
-{
-	if(convar != g_pFlag)
-	{
-		static char szName[10];
-	
-		if(convar == g_pAddHP)
-		{
-			strcopy(szName, sizeof(szName), "hp");
-		}
-		else if(convar == g_pArmorValue)
-		{
-			strcopy(szName, sizeof(szName), "armor");
-		}
-		else if(convar == g_pHelmet)
-		{
-			strcopy(szName, sizeof(szName), "helmet");
-		}
-		else if(convar == g_pMoney)
-		{
-			strcopy(szName, sizeof(szName), "money");
-		}
-		else if(convar == g_pDefuser)
-		{
-			strcopy(szName, sizeof(szName), "def");
-		}
-		else if(convar == g_pTaser)
-		{
-			strcopy(szName, sizeof(szName), "taser");
-		}
-		else if(convar == g_pRound)
-		{
-			strcopy(szName, sizeof(szName), "menu");
-		}
-		else if(convar == g_pPrefix)
-		{
-			strcopy(szName, sizeof(szName), "prefix");
-			int iNewValue = StringToInt(newValue);
-			//int iOldValue = StringToInt(oldValue);
-			if(iNewValue == 1)
-			{	
-				if(!g_bSayText2Hooked)
-				{
-					HookUserMessage(g_hSayText2, SayText2_Hook, true);
-					g_bSayText2Hooked = true;
-				}
-			}
-			else
-			{
-				UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
-				g_bSayText2Hooked = false;
-			}
-		}
-		else if(convar == g_pReservation)
-		{
-			strcopy(szName, sizeof(szName), "res");
-		}
-		
-		BuildUrl(szName, oldValue, newValue, convar);
-	}
-	else
+	if(convar == g_pFlag)
 	{
 		static bool bOverrided;
 		if(bOverrided)
@@ -265,9 +195,84 @@ public void ConChanged(ConVar convar, const char[] oldValue, const char[] newVal
 			bOverrided = true;
 		}
 	}
+	else if(convar == g_pTimer)
+	{
+		int iOldValue = StringToInt(oldValue);
+		int iNewValue = StringToInt(newValue);
+
+		if(iOldValue > 0 && iNewValue <= 0)
+			KillTimer(g_hTimerInfo);
+	
+		else if(iOldValue <= 0 && iNewValue > 0)
+			g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	}
+	else if(convar == g_pPrefix)
+	{
+		int iNewValue = StringToInt(newValue);
+		if(iNewValue == 1)
+		{	
+			if(!g_bSayText2Hooked)
+			{
+				HookUserMessage(g_hSayText2, SayText2_Hook, true);
+				g_bSayText2Hooked = true;
+			}
+		}
+		else
+		{
+			UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
+			g_bSayText2Hooked = false;
+		}
+	}
 }
 
-public void BuildUrl(const char[] unique_name, const char[] oldValue, const char[] newValue, ConVar changed)
+public void WebConvar(ConVar convar, const char[] oldValue, const char[] newValue)
+{
+	static char szName[10];
+	
+	if(convar == g_pAddHP)
+	{
+		strcopy(szName, sizeof(szName), "hp");
+	}
+	else if(convar == g_pArmorValue)
+	{
+		strcopy(szName, sizeof(szName), "armor");
+	}
+	else if(convar == g_pHelmet)
+	{
+		strcopy(szName, sizeof(szName), "helmet");
+	}
+	else if(convar == g_pMoney)
+	{
+		strcopy(szName, sizeof(szName), "money");
+	}
+	else if(convar == g_pDefuser)
+	{
+		strcopy(szName, sizeof(szName), "def");
+	}
+	else if(convar == g_pTaser)
+	{
+		strcopy(szName, sizeof(szName), "taser");
+	}
+	else if(convar == g_pRound)
+	{
+		strcopy(szName, sizeof(szName), "menu");
+	}
+	else if(convar == g_pPrefix)
+	{
+		strcopy(szName, sizeof(szName), "prefix");
+
+		//Go to plugin cvar hooks
+		PluginConvar(convar, oldValue, newValue);
+	}
+	else if(convar == g_pReservation)
+	{
+		strcopy(szName, sizeof(szName), "res");
+	}
+		
+	BuildUrl(convar, szName, oldValue, newValue);
+}
+
+void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[] oldValue = "", const char[] newValue = "")
 {
 	//g_szUrlMotd[] = { "http://localhost/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
 	
@@ -410,7 +415,7 @@ public void OnConfigsExecuted()
 	g_hWeaponsMenuPrimary.ExitButton = false;
 	g_hWeaponsMenuSecondary.ExitButton = false;
 
-	BuildUrl("", "", "", null);
+	BuildUrl();
 
 	if(g_pPrefix.BoolValue && !g_bSayText2Hooked)
 	{
