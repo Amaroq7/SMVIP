@@ -543,10 +543,11 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 {
 	++g_iRound;
 	g_bBuyTimeExpired = false;
+	Player client;
 
 	for(int i=1; i <= MaxClients; i++)
 	{
-		Player client = Player(i);
+		client = Player(i);
 		if(client.connected)
 			client.VipUpdate();
 	}
