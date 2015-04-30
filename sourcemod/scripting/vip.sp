@@ -654,6 +654,11 @@ public void OnClientDisconnect(int client)
 	{
 		client_pl.vip = false;
 		client_pl.disturbed = false;
+
+		int iIndex = g_adtVips.FindValue(client);
+
+		if(iIndex != -1)
+			g_adtVips.Erase(iIndex);
 	}
 }
 
@@ -740,4 +745,6 @@ public void OnPluginEnd()
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
+
+	g_adtVips.Clear();
 }
