@@ -10,7 +10,7 @@
 
 /* Plugin's info */
 char szAuthor[] = "Ni3znajomy";
-char szVersion[] = "0.1.9";
+char szVersion[] = "0.1.9-dev";
 char szURL[] = "https://github.com/Ni3znajomy";
 char szPlugin[] = "V.I.P.";
 char szWebPluginVersion[] = "000109";
