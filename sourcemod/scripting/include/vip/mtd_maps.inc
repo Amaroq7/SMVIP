@@ -299,14 +299,16 @@ methodmap Player < Entity
 
 		iLen = strcopy(szText, sizeof(szText), "VIPy Online: ");
 
-		if(g_adtVips.Length)
+		int iLenArray = g_adtVips.Length;
+
+		if(iLenArray)
 		{
-			for(int i=0; i<g_adtVips.Length; i++)
+			for(int i=0; i<iLenArray; i++)
 			{
 				client = Player(g_adtVips.Get(i));
 				client.GetName(szName, sizeof(szName));
 
-				if(!(i+1 == g_adtVips.Length))
+				if(!(i+1 == iLenArray))
 					iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01,", szName);
 				else
 					iLen += FormatEx(szText[iLen], sizeof(szText)-iLen, "\x04%s\x01.", szName);
