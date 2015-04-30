@@ -745,4 +745,6 @@ public void OnPluginEnd()
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
+
+	g_adtVips.Clear();
 }
