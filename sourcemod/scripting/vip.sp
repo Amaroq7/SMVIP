@@ -689,7 +689,9 @@ public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 		if(g_pTaser.BoolValue)
 			client_pl.GiveItem("weapon_taser");
 
-		if(g_iRound >= g_pRound.IntValue)
+		int iReqRounds = g_pRound.IntValue;
+
+		if(iReqRounds > 0 && g_iRound >= iReqRounds)
 			client_pl.VIPMenu();
 	}
 }

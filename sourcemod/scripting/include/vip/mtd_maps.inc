@@ -224,9 +224,6 @@ methodmap Player < Entity
 
 	public void VIPMenu()
 	{
-		if(!g_pRound.IntValue)
-			return;
-
 		g_hPlayerMenu = new Panel();
 	
 		g_hPlayerMenu.SetTitle("Menu VIP");
@@ -257,7 +254,9 @@ methodmap Player < Entity
 
 	public void OpenMenuCmd()
 	{
-		if(g_iRound < g_pRound.IntValue)
+		int iReqRounds = g_pRound.IntValue;
+
+		if(iReqRounds <= 0 || g_iRound < iReqRounds)
 			return;
 
 		//Check if other menu disturbed player to choose weapon
