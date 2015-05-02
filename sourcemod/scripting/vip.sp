@@ -8,6 +8,13 @@
 #pragma newdecls required	//Force new syntax
 /* Pragmas End */
 
+/* Defines */
+#define MAX_MONEY 16000			//Defines technical limit of money
+#define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
+#define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
+#define MAX_WEAPONS 63			//Property g_hMyWeapons
+/* End Defines */
+
 /* Plugin's info */
 char szAuthor[] = "Ni3znajomy";
 char szVersion[] = "0.1.9-dev";
@@ -24,13 +31,6 @@ public Plugin myinfo =
 	url = szURL
 };
 /* End Plugin's info */
-
-/* Defines */
-#define MAX_MONEY 16000			//Defines technical limit of money
-#define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
-#define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
-#define MAX_WEAPONS 63			//Property g_hMyWeapons
-/* End Defines */
 
 /* Global variables */
 bool g_bIsVip[MAXPLAYERS+1];
