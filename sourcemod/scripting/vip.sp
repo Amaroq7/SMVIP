@@ -13,6 +13,7 @@
 #define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
 #define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
 #define MAX_WEAPONS 63			//Property g_hMyWeapons
+//#define CSS_SUPPORT			//Enables support for CSS
 /* End Defines */
 
 /* Plugin's info */
