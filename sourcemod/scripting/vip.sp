@@ -683,8 +683,8 @@ public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 		
 		client_pl.SetProp(Prop_Send, "m_iAccount", (iMoney+iAddMoney >= iMaxMoney) ? iMaxMoney : iMoney+iAddMoney);
 		
-		if(client_pl.team == CS_TEAM_CT)
-			client_pl.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
+		if(client_pl.team == CS_TEAM_CT && g_pDefuser.BoolValue)
+			client_pl.SetProp(Prop_Send, "m_bHasDefuser", true);
 
 		if(g_pTaser.BoolValue)
 			client_pl.GiveItem("weapon_taser");
