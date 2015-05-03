@@ -198,19 +198,17 @@ methodmap Player < Entity
 
 	public void VipUpdate()
 	{
-		this.vip = true;
+		this.vip = false;
 
 		int iFlags = this.flags;
 
-		if(!iFlags)
-			this.vip = false;
-		else
+		if(iFlags)
 		{
 			static char szFlag[2];
 			g_pFlag.GetString(szFlag, sizeof(szFlag));
 
-			if(!(iFlags & ReadFlagString(szFlag)) || !(iFlags & ADMFLAG_ROOT))
-				this.vip = false;
+			if((iFlags & ReadFlagString(szFlag)) || (iFlags & ADMFLAG_ROOT))
+				this.vip = true;
 		}
 
 		int iIndex = g_adtVips.FindValue(this.index);
