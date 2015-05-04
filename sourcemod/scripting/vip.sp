@@ -10,7 +10,7 @@
 
 /* Defines */
 #define MAX_MONEY 16000			//Defines technical limit of money
-#define CSS_SUPPORT			//Enables support for CSS
+//#define CSS_SUPPORT			//Enables support for CSS
 #if !defined CSS_SUPPORT
 #define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
 #define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
