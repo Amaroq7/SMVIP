@@ -6,7 +6,6 @@ $helmet = $_GET['helmet'];
 $money = $_GET['money'];
 $hp = $_GET['hp'];
 $def = $_GET['def'];
-$taser = $_GET['taser'];
 $menu = $_GET['menu'];
 $prefix = $_GET['prefix'];
 
@@ -18,6 +17,14 @@ if(isset($_GET['res'])) //(backwards compatibility)
 	$reservation = $_GET['res'];
 }
 //0.1.4
+
+$taser = NULL;
+
+//CSS does not have a taser
+if(isset($_GET['taser']))
+{
+	$taser = $_GET['taser'];
+}
 
 $css_styles = '<style type="text/css">body {background-color: #000000;} h1 {text-align: center; vertical-align: top; color: yellow; font-size: 25px; font-family: arial; font-weight: bold;} h2 {text-align: center; vertical-align: top; color: yellow; font-size: 15px; font-family: arial;} p2 {text-align:center; color: red; font-size: 9px; font-weight: bold;} a:link {color:green; background-color:transparent; text-decoration:none} a:visited {color:green; background-color:transparent; text-decoration:none} a:hover {color:green; background-color:transparent; text-decoration:underline} num {color: red}</style>';
 
