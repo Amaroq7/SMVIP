@@ -1,4 +1,4 @@
-# VIP plugin for CSGO
+# VIP plugin
 
 # Features
 - vip prefix in chat (cvar)
@@ -10,11 +10,11 @@
 - free defuser (cvar)
 - extra money at round start (cvar)
 - prints in chat who, currently on a server, has VIP status (command)
+- support for CSS
 
 # To Do
 - multilingual
 - vip models
-- add support for CSS
 
 # Known Bugs
 - If you have usp-s in your loadout and you choose p2000 from the weapon menu, you will get usp-s
