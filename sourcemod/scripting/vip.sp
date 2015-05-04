@@ -573,7 +573,11 @@ public void OnConfigsExecuted()
 
 public Action TimerVipInfo(Handle timer)
 {
+	#if !defined CSS_SUPPORT
 	PrintChatAll("\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x04.");
+	#else
+	PrintChatAll("\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x03/vip\x04 lub \x03!vip\x04.");
+	#endif
 }
 
 //Load client's preferences
@@ -633,8 +637,10 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
-			#endif
 			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+			#else
+			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x03/menuv\x04 lub \x03!menuv\x04.");
+			#endif
 			client.disturbed = true;
 		}
 	}
@@ -684,8 +690,10 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
-			#endif
 			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+			#else
+			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x03/menuv\x04 lub \x03!menuv\x04.");
+			#endif
 			client.disturbed = true;
 		}
 	}
@@ -790,8 +798,10 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
-		#endif
 		client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
+		#else
+		client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x03/menuv\x04 lub \x03!menuv\x04.");
+		#endif
 		client.disturbed = true;
 	}
 }
@@ -809,7 +819,11 @@ public void OnClientPostAdminCheck(int client)
 		static char szName[MAX_NAME_LENGTH];
 		client_pl.GetName(szName, sizeof(szName));
 		client_pl.vip = true;
+		#if !defined CSS_SUPPORT
 		PrintChatAll("Na serwer wbił VIP\x10 %s\x01.", szName);
+		#else
+		PrintChatAll("Na serwer wbił VIP\x05 %s\x01.", szName);
+		#endif
 	}
 }
 
