@@ -10,10 +10,15 @@
 
 /* Defines */
 #define MAX_MONEY 16000			//Defines technical limit of money
+#define CSS_SUPPORT			//Enables support for CSS
+#if !defined CSS_SUPPORT
 #define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
 #define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
+#else
+#define PRIMARY_WEAPONS_COUNT 18	//Defines amount of primary weapons
+#define SECONDARY_WEAPONS_COUNT 6	//Defines amount of secondary weapons
+#endif
 #define MAX_WEAPONS 63			//Property g_hMyWeapons
-//#define CSS_SUPPORT			//Enables support for CSS
 /* End Defines */
 
 /* Plugin's info */
@@ -26,7 +31,11 @@ char szWebPluginVersion[] = "000109";
 public Plugin myinfo = 
 {
 	name = szPlugin,
-	description = "V.I.P.",
+#if !defined CSS_SUPPORT
+	description = "V.I.P. - CSGO Edition",
+#else
+	description = "V.I.P. - CSS Edition",
+#endif
 	author = szAuthor,
 	version = szVersion,
 	url = szURL
@@ -35,14 +44,17 @@ public Plugin myinfo =
 
 /* Global variables */
 bool g_bIsVip[MAXPLAYERS+1];
+#if !defined CSS_SUPPORT
 bool g_bBuyTimeExpired;
-bool g_bDisturbed[MAXPLAYERS+1];
 bool g_bShowChangedTeamMsg[MAXPLAYERS+1];
+#endif
+bool g_bDisturbed[MAXPLAYERS+1];
 
 int g_iPrimWeap[MAXPLAYERS+1];
 int g_iSecWeap[MAXPLAYERS+1];
 int g_iRound;
 
+#if !defined CSS_SUPPORT
 char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "Nova", "XM1014", "MAG-7", "Obrzyn", "MAC-10", "MP7", "MP9", "UMP-45", "PP-Bizon", "P90", "FAMAS", "M4A4", "M4A1-S", "Galil AR", "AK-47", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20", "M249", "Negev" };
 char g_szPrimaryWeaponsEngine[PRIMARY_WEAPONS_COUNT][] = { "weapon_nova", "weapon_xm1014", "weapon_mag7", "weapon_sawedoff", "weapon_mac10", "weapon_mp7", "weapon_mp9", "weapon_ump45", "weapon_bizon", "weapon_p90", "weapon_famas", "weapon_m4a1", "weapon_m4a1_silencer", "weapon_galilar", "weapon_ak47", "weapon_ssg08", "weapon_sg553", "weapon_aug", "weapon_awp", "weapon_g3sg1", "weapon_scar20", "weapon_m249", "weapon_negev" };
 char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "P2000", "P250", "USP-S", "Desert Deagle", "Five-SeveN", "Berretty", "Tec-9", "CZ75 Auto (CT)", "CZ75 Auto (TT)"};
@@ -53,6 +65,14 @@ int g_iTeamPrimaryWeapons[PRIMARY_WEAPONS_COUNT] = { 0, 0, CS_TEAM_CT, CS_TEAM_T
 int g_iTeamSecondaryWeapons[SECONDARY_WEAPONS_COUNT] = { CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_CT, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, CS_TEAM_CT, CS_TEAM_T };
 
 char g_szUrlMotd[512] = { "http://YOUR_WEB/vip_web/index.html?web=http://YOUR_WEB/vip_web/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
+#else
+char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "M3", "XM1014", "TMP", "MAC-10", "MP5Navy", "UMP-45", "P90", "FAMAS", "Galil", "Scout", "M4A1", "AK-47", "AUG", "SG 552", "AWP", "SG 550", "G3SG1", "M249" };
+char g_szPrimaryWeaponsEngine[PRIMARY_WEAPONS_COUNT][] = { "weapon_m3", "weapon_xm1014", "weapon_tmp", "weapon_mac10", "weapon_mp5navy", "weapon_ump45", "weapon_p90", "weapon_famas", "weapon_galil", "weapon_scout", "weapon_m4a1", "weapon_ak47", "weapon_aug", "weapon_sg552", "weapon_awp", "weapon_sg550", "weapon_g3sg1", "weapon_m249" };
+char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "USP", "P228", "Desert Deagle", "Five-SeveN", "Beretta 92s" };
+char g_szSecondaryWeaponsEngine[SECONDARY_WEAPONS_COUNT][] = { "weapon_glock", "weapon_usp", "weapon_p228", "weapon_deagle", "weapon_fiveseven", "weapon_elite" };
+
+char g_szUrlMotd[512] = { "http://YOUR_WEB/vip_web/index.html?web=http://YOUR_WEB/vip_web/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&menu=_menu&prefix=_prefix&res=_res" };
+#endif
 
 ConVar g_pMaxMoney;
 ConVar g_pArmorValue;
@@ -60,7 +80,9 @@ ConVar g_pHelmet;
 ConVar g_pMoney;
 ConVar g_pAddHP;
 ConVar g_pDefuser;
+#if !defined CSS_SUPPORT
 ConVar g_pTaser;
+#endif
 ConVar g_pRound;
 ConVar g_pPrefix;
 ConVar g_pTimer;
@@ -75,7 +97,10 @@ Handle g_hPlayerPrim;
 Handle g_hPlayerSec;
 
 UserMsg g_hSayText2;
+
+#if !defined CSS_SUPPORT
 UserMsg g_hWarmupEnded;
+#endif
 
 bool g_bSayText2Hooked;
 
@@ -89,8 +114,9 @@ Handle g_hTimerInfo;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
+	EngineVersion Engine = GetEngineVersion();
 	//If engine game is not csgo plugin won't load
-	if(GetEngineVersion() != Engine_CSGO)
+	if(Engine != Engine_CSGO && Engine != Engine_CSS)
 	{
 		SetFailState("This plugin is not compatible with this Engine!");
 		return APLRes_Failure;
@@ -123,7 +149,9 @@ public void OnPluginStart()
 	g_pHelmet = CreateConVar("sm_vip_helmet", "1", "Sets the player the helmet", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_pMoney = CreateConVar("sm_vip_money", "300", "How much money give to the player at spawn", FCVAR_PLUGIN, true, 0.0, false);
 	g_pDefuser = CreateConVar("sm_vip_defuser", "1", "Gives the defuser to the player", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	#if !defined CSS_SUPPORT
 	g_pTaser = CreateConVar("sm_vip_taser", "1", "Gives the taser (zeus) to the player", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	#endif
 	g_pRound = CreateConVar("sm_vip_menu_round", "3", "Specifies from which round vip menu is enabled", FCVAR_PLUGIN, true, 0.0, false);
 	g_pPrefix = CreateConVar("sm_vip_prefix", "1", "Enables vip prefix in chat", FCVAR_PLUGIN, true, 0.0, true, 1.0);
 	g_pTimer = CreateConVar("sm_vip_msg", "60", "Time in seconds when the info is displayed to the players", FCVAR_PLUGIN, true, 0.0, false);
@@ -137,7 +165,9 @@ public void OnPluginStart()
 	g_pHelmet.AddChangeHook(WebConvar);
 	g_pMoney.AddChangeHook(WebConvar);
 	g_pDefuser.AddChangeHook(WebConvar);
+	#if !defined CSS_SUPPORT
 	g_pTaser.AddChangeHook(WebConvar);
+	#endif
 	g_pRound.AddChangeHook(WebConvar);
 	g_pPrefix.AddChangeHook(WebConvar);
 	g_pReservation.AddChangeHook(WebConvar);
@@ -148,13 +178,19 @@ public void OnPluginStart()
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
 	g_hPlayerSec = RegClientCookie("weapon_sec_vip", "Player weapon secondary", CookieAccess_Protected);
 
-	HookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
+	#if !defined CSS_SUPPORT
 	HookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_PostNoCopy);
 	HookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	HookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	HookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
-	HookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	HookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
+
+	g_hWarmupEnded = GetUserMessageId("WarmupHasEnded");
+	HookUserMessage(g_hWarmupEnded, WarmupEnded_Hook, false);
+	#endif
+	
+	HookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
+	HookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 
 	RegConsoleCmd("sm_vip_info", VipInfoConsole, "Prints info about VIP plugin");
 	RegConsoleCmd("vip", ShowVipInfo, "Shows MOTD about VIP");
@@ -165,11 +201,9 @@ public void OnPluginStart()
 
 	//VIP prefix
 	g_hSayText2 = GetUserMessageId("SayText2");
+} 
 
-	g_hWarmupEnded = GetUserMessageId("WarmupHasEnded");
-	HookUserMessage(g_hWarmupEnded, WarmupEnded_Hook, false);
-}
-
+#if !defined CSS_SUPPORT
 public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast)
 {
 	Player client = Player(GetClientOfUserId(event.GetInt("userid")));
@@ -179,6 +213,7 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 
 	return Plugin_Continue;
 }
+#endif
 
 public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newValue)
 {
@@ -250,10 +285,12 @@ public void WebConvar(ConVar convar, const char[] oldValue, const char[] newValu
 	{
 		strcopy(szName, sizeof(szName), "def");
 	}
+	#if !defined CSS_SUPPORT
 	else if(convar == g_pTaser)
 	{
 		strcopy(szName, sizeof(szName), "taser");
 	}
+	#endif
 	else if(convar == g_pRound)
 	{
 		strcopy(szName, sizeof(szName), "menu");
@@ -280,7 +317,11 @@ void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[]
 	if(changed == null)
 	{
 		char szTemp[8];
+		#if !defined CSS_SUPPORT
 		char szKey[10][] = { "_version", "_armor", "_helmet", "_money", "_hp", "_def", "_taser", "_menu", "_prefix", "_res" };
+		#else
+		char szKey[9][] = { "_version", "_armor", "_helmet", "_money", "_hp", "_def", "_menu", "_prefix", "_res" };
+		#endif
 
 		int pos;
 
@@ -307,9 +348,11 @@ void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[]
 		IntToString(g_pDefuser.BoolValue, szTemp, sizeof(szTemp));
 		ReplaceString(g_szUrlMotd, sizeof(g_szUrlMotd), szKey[pos++], szTemp);
 
+		#if !defined CSS_SUPPORT
 		//Taser
 		IntToString(g_pTaser.BoolValue, szTemp, sizeof(szTemp));
 		ReplaceString(g_szUrlMotd, sizeof(g_szUrlMotd), szKey[pos++], szTemp);
+		#endif
 
 		//Menu
 		IntToString(g_pRound.IntValue, szTemp, sizeof(szTemp));
@@ -332,28 +375,126 @@ void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[]
 	}
 }
 
+#if !defined CSS_SUPPORT
 public Action WarmupEnded_Hook(UserMsg msg_id, Protobuf msg, const int[] players, int playersNum, bool reliable, bool init)
 {
 	g_iRound = 0;
 
 	return Plugin_Continue;
 }
+#endif
 
+#if !defined CSS_SUPPORT
 public Action SayText2_Hook(UserMsg msg_id, Protobuf msg, const int[] players, int playersNum, bool reliable, bool init)
+#else
+public Action SayText2_Hook(UserMsg msg_id, BfRead msg, const int[] players, int playersNum, bool reliable, bool init)
+#endif
 {
+	#if !defined CSS_SUPPORT
 	Player client = Player(msg.ReadInt("ent_idx"));
+	#else
+	Player client = Player(msg.ReadByte());
+	#endif
 
 	//VIP prefix
 	if(client.vip)
 	{
+		#if !defined CSS_SUPPORT
 		static char szTemp[128];
 		msg.ReadString("params", szTemp, sizeof(szTemp), 0);
 		Format(szTemp, sizeof(szTemp), "[VIP] %s", szTemp);
 		msg.SetString("params", szTemp, 0);
 		return Plugin_Continue;
+		#else
+		static char szTemp[256];
+		int iFlags = USERMSG_BLOCKHOOKS;
+		DataPack dp = CreateDataPack();
+
+		dp.WriteCell(playersNum);
+		for(int i=0;i<playersNum;i++)
+		{
+			dp.WriteCell(players[i]);
+		}
+
+		if(reliable)
+			iFlags |= USERMSG_RELIABLE;
+		if(init)
+			iFlags |= USERMSG_INITMSG;
+
+		dp.WriteCell(iFlags);
+		dp.WriteCell(client.index);
+		dp.WriteCell(msg.ReadByte());
+
+		msg.ReadString(szTemp, sizeof(szTemp));
+		dp.WriteString(szTemp);
+		
+		msg.ReadString(szTemp, sizeof(szTemp));
+		dp.WriteString(szTemp);
+
+		msg.ReadString(szTemp, sizeof(szTemp));
+		dp.WriteString(szTemp);
+
+		msg.ReadString(szTemp, sizeof(szTemp));
+		dp.WriteString(szTemp);
+
+		msg.ReadString(szTemp, sizeof(szTemp));
+		dp.WriteString(szTemp);
+
+		dp.Reset();
+		//Delay...
+		CreateTimer(0.0, ExecuteSayText2, dp, TIMER_DATA_HNDL_CLOSE);
+
+		return Plugin_Handled;
+		#endif
 	}
 	return Plugin_Continue;
 }
+
+#if defined CSS_SUPPORT
+public Action ExecuteSayText2(Handle timer, Handle data)
+{
+	static char szTemp[256];
+	DataPack dp = view_as<DataPack>(data);
+
+	int iNumPlayers = dp.ReadCell();
+	int[] iPlayers = new int[iNumPlayers];
+	Player iClient;
+	int iCount;
+	
+	for(int i=0;i<iNumPlayers;i++)
+	{
+		iClient = Player(dp.ReadCell());
+		if(iClient.connected)
+			iPlayers[iCount++] = iClient.index;
+	}
+
+	BfWrite msg = view_as<BfWrite>(StartMessage("SayText2", iPlayers, iCount, dp.ReadCell()));
+
+	//index who send
+	msg.WriteByte(dp.ReadCell());
+	//to chat
+	msg.WriteByte(dp.ReadCell());
+	//type
+	dp.ReadString(szTemp, sizeof(szTemp));
+	msg.WriteString(szTemp);
+	//name
+	dp.ReadString(szTemp, sizeof(szTemp));
+	Format(szTemp, sizeof(szTemp), "[VIP] %s", szTemp);
+	msg.WriteString(szTemp);
+	//text
+	dp.ReadString(szTemp, sizeof(szTemp));
+	msg.WriteString(szTemp);
+	//location
+	dp.ReadString(szTemp, sizeof(szTemp));
+	msg.WriteString(szTemp);
+	// ??
+	dp.ReadString(szTemp, sizeof(szTemp));
+	msg.WriteString(szTemp);
+	EndMessage();
+
+	return Plugin_Continue;
+}
+#endif
 
 //Info about plugin in console
 public Action VipInfoConsole(int client, int args)
@@ -388,6 +529,7 @@ public Action ShowVipsOnServer(int client, int args)
 	return Plugin_Handled;
 }
 
+#if !defined CSS_SUPPORT
 public void BuyTime_Ended(Event event, const char[] name, bool dontBroadcast)
 {
 	g_bBuyTimeExpired = true;
@@ -397,6 +539,7 @@ public void EndRestartMatch(Event event, const char[] name, bool dontBroadcast)
 {
 	g_iRound = 0;
 }
+#endif
 
 public void OnConfigsExecuted()
 {
@@ -430,7 +573,7 @@ public void OnConfigsExecuted()
 
 public Action TimerVipInfo(Handle timer)
 {
-	PrintChatAll("\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x03.");
+	PrintChatAll("\x04 Chcesz wiedzieć co posiada vip? Napisz na chacie \x02/vip\x04 lub \x02!vip\x04.");
 }
 
 //Load client's preferences
@@ -456,11 +599,13 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 		if(!client.in_game)
 			return;
 
+		#if !defined CSS_SUPPORT
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
+		#endif
 		client.primary_weapon = param2;
 
 		static char szOption[3];
@@ -481,12 +626,14 @@ public int WeaponsHandlerPrimary(Menu menu, MenuAction action, int param1, int p
 
 		else if(param2 == MenuCancel_Interrupted)
 		{
+			#if !defined CSS_SUPPORT
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
 				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
+			#endif
 			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
@@ -502,11 +649,13 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 		if(!client.in_game)
 			return;
 
+		#if !defined CSS_SUPPORT
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
+		#endif
 		client.secondary_weapon = param2;
 
 		static char szOption[3];
@@ -528,12 +677,14 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 
 		else if(param2 == MenuCancel_Interrupted)
 		{
+			#if !defined CSS_SUPPORT
 			//Check if buytime has expired
 			if(g_bBuyTimeExpired)
 			{
 				client.PrintChat("\x02Czas kupowania minął!");
 				return;
 			}
+			#endif
 			client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 			client.disturbed = true;
 		}
@@ -543,7 +694,9 @@ public int WeaponsHandlerSecondary(Menu menu, MenuAction action, int param1, int
 public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 {
 	++g_iRound;
+	#if !defined CSS_SUPPORT
 	g_bBuyTimeExpired = false;
+	#endif
 	Player client;
 
 	for(int i=1; i <= MaxClients; i++)
@@ -563,11 +716,13 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		if(!client.in_game || !client.alive)
 			return;
 
+		#if !defined CSS_SUPPORT
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
+		#endif
 		if(param2 == 1)
 		{
 			g_hWeaponsMenuPrimary.Display(client.index, MENU_TIME_FOREVER);
@@ -578,7 +733,9 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		}
 		else if(param2 == 5)
 		{
+			#if !defined CSS_SUPPORT
 			client.not_changed_team = true;
+			#endif
 			int iWeapon;
 			if((iWeapon = client.GetWeaponInSlot(CS_SLOT_PRIMARY)) != -1)
 				client.RemoveItem(iWeapon);
@@ -586,21 +743,27 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 			if((iWeapon = client.GetWeaponInSlot(CS_SLOT_SECONDARY)) != -1)
 				client.RemoveItem(iWeapon);
 
+			#if !defined CSS_SUPPORT
 			int iTeam = client.team;
 
 			if(g_iTeamPrimaryWeapons[client.primary_weapon])
 				client.team = g_iTeamPrimaryWeapons[client.primary_weapon];
+			#endif
 
 			client.GiveItem(g_szPrimaryWeaponsEngine[client.primary_weapon]);
 
+			#if !defined CSS_SUPPORT
 			if(g_iTeamSecondaryWeapons[client.secondary_weapon])
 				client.team = g_iTeamSecondaryWeapons[client.secondary_weapon];
+			#endif
 
 			client.GiveItem(g_szSecondaryWeaponsEngine[client.secondary_weapon]);
 
+			#if !defined CSS_SUPPORT
 			client.team = iTeam;
 			
 			client.not_changed_team = false;
+			#endif
 
 			if(client.team == CS_TEAM_CT)
 				client.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
@@ -620,12 +783,14 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 		if(!client.in_game)
 			return;
 
+		#if !defined CSS_SUPPORT
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
 			client.PrintChat("\x02Czas kupowania minął!");
 			return;
 		}
+		#endif
 		client.PrintChat("\x04Żeby włączyć ponownie menu VIPa napisz \x02/menuv\x04 lub \x02!menuv\x04.");
 		client.disturbed = true;
 	}
@@ -687,8 +852,10 @@ public void PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 		if(client_pl.team == CS_TEAM_CT && g_pDefuser.BoolValue)
 			client_pl.SetProp(Prop_Send, "m_bHasDefuser", true);
 
+		#if !defined CSS_SUPPORT
 		if(g_pTaser.BoolValue)
 			client_pl.GiveItem("weapon_taser");
+		#endif
 
 		int iReqRounds = g_pRound.IntValue;
 
@@ -701,7 +868,9 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
 {
 	if(reason == CSRoundEnd_GameStart)
 	{
+		#if !defined CSS_SUPPORT
 		g_bBuyTimeExpired = false;
+		#endif
 		g_iRound = 0;
 	}
 	return Plugin_Continue;
@@ -739,15 +908,17 @@ public void OnPluginEnd()
 		g_bSayText2Hooked = false;
 	}
 
+	#if !defined CSS_SUPPORT
 	UnhookUserMessage(g_hWarmupEnded, WarmupEnded_Hook, false);
-
-	UnhookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
 	UnhookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
 	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
 	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
-	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
+	#endif
+
+	UnhookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
+	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
 
 	g_adtVips.Clear();
 }
