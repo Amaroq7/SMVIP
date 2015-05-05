@@ -1,4 +1,4 @@
-# VIP plugin
+# SMVIP
 
 # Features
 - vip prefix in chat (cvar)
