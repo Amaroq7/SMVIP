@@ -85,6 +85,7 @@ methodmap Player < Entity
 		}
 	}
 
+	#if !defined CSS_SUPPORT
 	property bool not_changed_team
 	{
 		public get()
@@ -96,7 +97,7 @@ methodmap Player < Entity
 			g_bShowChangedTeamMsg[this.index] = state;
 		}
 	}
-
+	#endif
 	property int team
 	{
 		public get()
@@ -264,12 +265,14 @@ methodmap Player < Entity
 		//If disturbed we set it to false
 		this.disturbed = false;
 
+		#if !defined CSS_SUPPORT
 		//Check if buytime has expired
 		if(g_bBuyTimeExpired)
 		{
 			this.PrintChat("\x01[VIP] \x02Czas kupowania minął!");
 			return;
 		}
+		#endif
 		//If everything's ok we show menu
 		this.VIPMenu();
 	}
