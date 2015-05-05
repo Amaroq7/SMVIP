@@ -43,16 +43,16 @@
 char szAuthor[] = "Ni3znajomy";
 char szVersion[] = "0.1.9-dev";
 char szURL[] = "https://github.com/Ni3znajomy";
-char szPlugin[] = "V.I.P.";
+char szPlugin[] = "SMVIP";
 char szWebPluginVersion[] = "000109";
 
 public Plugin myinfo = 
 {
 	name = szPlugin,
 #if !defined CSS_SUPPORT
-	description = "V.I.P. - CSGO Edition",
+	description = "VIP plugin for SourceMod (CSGO Edition)",
 #else
-	description = "V.I.P. - CSS Edition",
+	description = "VIP plugin for SourceMod (CSS Edition)",
 #endif
 	author = szAuthor,
 	version = szVersion,
