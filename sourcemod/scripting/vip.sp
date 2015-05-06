@@ -1,3 +1,21 @@
+/*
+    SMVIP - VIP plugin for SourceMod
+    Copyright (C) 2015 Karol "Ni3znajomy" Szuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <sourcemod>
 #include <sdktools>
 #include <cstrike>
@@ -25,16 +43,16 @@
 char szAuthor[] = "Ni3znajomy";
 char szVersion[] = "0.1.9-dev";
 char szURL[] = "https://github.com/Ni3znajomy";
-char szPlugin[] = "V.I.P.";
+char szPlugin[] = "SMVIP";
 char szWebPluginVersion[] = "000109";
 
 public Plugin myinfo = 
 {
 	name = szPlugin,
 #if !defined CSS_SUPPORT
-	description = "V.I.P. - CSGO Edition",
+	description = "VIP plugin for SourceMod (CSGO Edition)",
 #else
-	description = "V.I.P. - CSS Edition",
+	description = "VIP plugin for SourceMod (CSS Edition)",
 #endif
 	author = szAuthor,
 	version = szVersion,
@@ -55,9 +73,9 @@ int g_iSecWeap[MAXPLAYERS+1];
 int g_iRound;
 
 #if !defined CSS_SUPPORT
-char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "Nova", "XM1014", "MAG-7", "Obrzyn", "MAC-10", "MP7", "MP9", "UMP-45", "PP-Bizon", "P90", "FAMAS", "M4A4", "M4A1-S", "Galil AR", "AK-47", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20", "M249", "Negev" };
+char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "Nova", "XM1014", "MAG-7", "Sawed-off", "MAC-10", "MP7", "MP9", "UMP-45", "PP-Bizon", "P90", "FAMAS", "M4A4", "M4A1-S", "Galil AR", "AK-47", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20", "M249", "Negev" };
 char g_szPrimaryWeaponsEngine[PRIMARY_WEAPONS_COUNT][] = { "weapon_nova", "weapon_xm1014", "weapon_mag7", "weapon_sawedoff", "weapon_mac10", "weapon_mp7", "weapon_mp9", "weapon_ump45", "weapon_bizon", "weapon_p90", "weapon_famas", "weapon_m4a1", "weapon_m4a1_silencer", "weapon_galilar", "weapon_ak47", "weapon_ssg08", "weapon_sg553", "weapon_aug", "weapon_awp", "weapon_g3sg1", "weapon_scar20", "weapon_m249", "weapon_negev" };
-char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "P2000", "P250", "USP-S", "Desert Deagle", "Five-SeveN", "Berretty", "Tec-9", "CZ75 Auto (CT)", "CZ75 Auto (TT)"};
+char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "P2000", "P250", "USP-S", "Desert Deagle", "Five-SeveN", "Beretta 92s", "Tec-9", "CZ75 Auto (CT)", "CZ75 Auto (TT)"};
 char g_szSecondaryWeaponsEngine[SECONDARY_WEAPONS_COUNT][] = { "weapon_glock", "weapon_hkp2000", "weapon_p250", "weapon_usp_silencer", "weapon_deagle", "weapon_fiveseven", "weapon_elite", "weapon_tec9", "weapon_cz75a", "weapon_cz75a" };
 
 int g_iTeamPrimaryWeapons[PRIMARY_WEAPONS_COUNT] = { 0, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, 0, CS_TEAM_CT, 0, 0, 0, CS_TEAM_CT, CS_TEAM_CT, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, 0, CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_T, CS_TEAM_CT, 0, 0 };

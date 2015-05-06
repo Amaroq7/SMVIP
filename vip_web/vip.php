@@ -1,4 +1,21 @@
 <?php
+/*
+    SMVIP - VIP plugin for SourceMod
+    Copyright (C) 2015 Karol "Ni3znajomy" Szuster
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 $version = $_GET['version'];
 $armor = $_GET['armor'];
@@ -100,7 +117,7 @@ if($reservation)
 	$reservation_text = '<h2><num>'.++$number.'.</num> Rezerwacja slota na serwerze.</h2><br />';
 }
 //0.1.4
-$version_text = '<p2>Plugin stworzony przez <a href="https://github.com/Ni3znajomy">Ni3znajomy</a>. Wersja pluginu <a href="https://github.com/Ni3znajomy/vip_csgo/blob/master/vip_web/changelog.txt">'.decode_plugin_version($version).'-dev</a>. Plugin opublikowany na licencji <a href="https://github.com/Ni3znajomy/vip_csgo/blob/master/LICENSE">GNU General Public License version 3</a>.</p2>';
+$version_text = '<p2>Plugin stworzony przez <a href="https://github.com/Ni3znajomy">Ni3znajomy</a>. Wersja pluginu <a href="https://github.com/Ni3znajomy/SMVIP/blob/master/changelog.txt">'.decode_plugin_version($version).'-dev</a>. Plugin opublikowany na licencji <a href="https://github.com/Ni3znajomy/SMVIP/blob/master/LICENSE">GNU General Public License version 3</a>.</p2>';
 
 $html = $html_header.$html_title.$armor_text.$money_text.$hp_text.$def_text.$taser_text.$menu_text.$prefix_text.$reservation_text;
 
