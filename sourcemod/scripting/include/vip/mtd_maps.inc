@@ -40,13 +40,31 @@ methodmap Entity
 		SetEntProp(this.index, type, key, value, size, element);
 	}
 
-	public bool IsValidEd()
+	public bool IsValid()
 	{
-		return IsValidEdict(this.index);
+		return IsValidEntity(this.index);
 	}
 }
 
-methodmap Player < Entity
+methodmap Edict < Entity
+{
+	public Edict(int index)
+	{
+		return view_as<Edict>(index);
+	}
+
+	public bool IsValid()
+	{
+		return IsValidEdict(this.index);
+	}
+	
+	public void Remove()
+	{
+		RemoveEdict(this.index);
+	}
+}
+
+methodmap Player < Edict
 {
 	public Player(int index)
 	{

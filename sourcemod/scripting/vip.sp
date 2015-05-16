@@ -762,12 +762,20 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 			#if !defined CSS_SUPPORT
 			client.not_changed_team = true;
 			#endif
-			int iWeapon;
-			if((iWeapon = client.GetWeaponInSlot(CS_SLOT_PRIMARY)) != -1)
-				client.RemoveItem(iWeapon);
+			Edict iWeapon;
+			iWeapon = Edict(client.GetWeaponInSlot(CS_SLOT_PRIMARY));
+			if(iWeapon.index != -1)
+			{
+				client.RemoveItem(iWeapon.index);
+				iWeapon.Remove();
+			}
 
-			if((iWeapon = client.GetWeaponInSlot(CS_SLOT_SECONDARY)) != -1)
-				client.RemoveItem(iWeapon);
+			iWeapon = Edict(client.GetWeaponInSlot(CS_SLOT_SECONDARY));
+			if(iWeapon.index != -1)
+			{
+				client.RemoveItem(iWeapon.index);
+				iWeapon.Remove();
+			}
 
 			#if !defined CSS_SUPPORT
 			int iTeam = client.team;
