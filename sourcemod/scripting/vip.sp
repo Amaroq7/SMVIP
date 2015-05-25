@@ -737,7 +737,7 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 
 public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-	//Prevents from display weapon menu after swapped teams (CSGO)
+	//Prevents from taking weapons after swapped teams (CSGO)
 	#if !defined CSS_SUPPORT
 	if(g_iRound < g_pRound.IntValue)
 		return;
