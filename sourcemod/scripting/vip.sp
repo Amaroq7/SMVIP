@@ -556,6 +556,8 @@ public void BuyTime_Ended(Event event, const char[] name, bool dontBroadcast)
 public void EndRestartMatch(Event event, const char[] name, bool dontBroadcast)
 {
 	g_iRound = 0;
+	g_hWeaponsMenuPrimary.Cancel();
+	g_hWeaponsMenuSecondary.Cancel();
 }
 #endif
 
@@ -735,6 +737,12 @@ public void RoundStartEvent(Event event, const char[] name, bool dontBroadcast)
 
 public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
+	//Prevents from taking weapons after swapped teams (CSGO)
+	#if !defined CSS_SUPPORT
+	if(g_iRound < g_pRound.IntValue)
+		return;
+	#endif
+
 	if(action == MenuAction_Select)
 	{
 		Player client = Player(param1);
@@ -911,6 +919,8 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
 		#if !defined CSS_SUPPORT
 		g_bBuyTimeExpired = false;
 		#endif
+		g_hWeaponsMenuPrimary.Cancel();
+		g_hWeaponsMenuSecondary.Cancel();
 		g_iRound = 0;
 	}
 	return Plugin_Continue;
