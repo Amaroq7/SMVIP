@@ -243,7 +243,7 @@ methodmap Player < Edict
 			static char szFlags[22];
 			g_pFlags.GetString(szFlags, sizeof(szFlags));
 
-			if((iFlags & ReadFlagString(szFlags)) || (iFlags & ADMFLAG_ROOT))
+			if((iFlags & ADMFLAG_ROOT) || (iFlags & ReadFlagString(szFlags)))
 				this.vip = true;
 		}
 
