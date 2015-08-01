@@ -104,7 +104,7 @@ ConVar g_pRound;
 ConVar g_pPrefix;
 ConVar g_pTimer;
 ConVar g_pReservation;
-ConVar g_pFlag;
+ConVar g_pFlags;
 
 Menu g_hWeaponsMenuPrimary;
 Menu g_hWeaponsMenuSecondary;
@@ -173,7 +173,7 @@ public void OnPluginStart()
 	g_pPrefix = CreateConVar("sm_vip_prefix", "1", "Enables vip prefix in chat", FCVAR_NONE, true, 0.0, true, 1.0);
 	g_pTimer = CreateConVar("sm_vip_msg", "60", "Time in seconds when the info is displayed to the players", FCVAR_NONE, true, 0.0, false);
 	g_pReservation = CreateConVar("sm_vip_reservation", "1", "Defines that vip has a reservation slot (info only for motd)", FCVAR_NONE, true, 0.0, true, 1.0);
-	g_pFlag = CreateConVar("sm_vip_flag", "t", "Defines flag for VIP privileges", FCVAR_NONE);
+	g_pFlags = CreateConVar("sm_vip_flags", "t", "Defines flags for VIP privileges", FCVAR_NONE);
 
 	AutoExecConfig(true, "vip");
 
@@ -189,7 +189,7 @@ public void OnPluginStart()
 	g_pPrefix.AddChangeHook(WebConvar);
 	g_pReservation.AddChangeHook(WebConvar);
 
-	g_pFlag.AddChangeHook(PluginConvar);
+	g_pFlags.AddChangeHook(PluginConvar);
 	g_pTimer.AddChangeHook(PluginConvar);
 
 	g_hPlayerPrim = RegClientCookie("weapon_prim_vip", "Player weapon primary", CookieAccess_Protected);
@@ -234,7 +234,7 @@ public Action PlayerTeamEvent(Event event, const char[] name, bool dontBroadcast
 
 public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if(convar == g_pFlag)
+	if(convar == g_pFlags)
 	{
 		UnsetCommandOverride("menuv", Override_Command);
 		AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
@@ -600,7 +600,7 @@ public void OnConfigsExecuted()
 
 	//override command with new access
 	char szFlags[22];
-	g_pFlag.GetString(szFlags, sizeof(szFlags));
+	g_pFlags.GetString(szFlags, sizeof(szFlags));
 	AddCommandOverride("menuv", Override_Command, szFlags);
 }
 

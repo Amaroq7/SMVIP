@@ -240,10 +240,10 @@ methodmap Player < Edict
 
 		if(iFlags)
 		{
-			static char szFlag[2];
-			g_pFlag.GetString(szFlag, sizeof(szFlag));
+			static char szFlags[22];
+			g_pFlags.GetString(szFlags, sizeof(szFlags));
 
-			if((iFlags & ReadFlagString(szFlag)) || (iFlags & ADMFLAG_ROOT))
+			if((iFlags & ReadFlagString(szFlags)) || (iFlags & ADMFLAG_ROOT))
 				this.vip = true;
 		}
 
