@@ -236,17 +236,8 @@ public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newV
 {
 	if(convar == g_pFlag)
 	{
-		static bool bOverrided;
-		if(bOverrided)
-		{
-			UnsetCommandOverride("menuv", Override_Command);
-			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
-		}
-		else
-		{
-			AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
-			bOverrided = true;
-		}
+		UnsetCommandOverride("menuv", Override_Command);
+		AddCommandOverride("menuv", Override_Command, ReadFlagString(newValue));
 	}
 	else if(convar == g_pTimer)
 	{
@@ -606,6 +597,11 @@ public void OnConfigsExecuted()
 
 	if(g_pTimer.IntValue > 0)
 		g_hTimerInfo = CreateTimer(g_pTimer.FloatValue, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+
+	//override command with new access
+	char szFlags[22];
+	g_pFlag.GetString(szFlags, sizeof(szFlags));
+	AddCommandOverride("menuv", Override_Command, szFlags);
 }
 
 public Action TimerVipInfo(Handle timer)
