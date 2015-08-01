@@ -161,18 +161,18 @@ public void OnPluginStart()
 {
 	g_pMaxMoney = FindConVar("mp_maxmoney");
 
-	g_pAddHP = CreateConVar("sm_vip_addhp", "5", "How many HP add to the player at spawn", FCVAR_PLUGIN, true, 0.0, false);
-	g_pArmorValue = CreateConVar("sm_vip_armor", "100", "How many armor set to the player at spawn", FCVAR_PLUGIN, true, 0.0, false);
-	g_pHelmet = CreateConVar("sm_vip_helmet", "1", "Sets the player the helmet", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_pMoney = CreateConVar("sm_vip_money", "300", "How much money give to the player at spawn", FCVAR_PLUGIN, true, 0.0, false);
-	g_pDefuser = CreateConVar("sm_vip_defuser", "1", "Gives the defuser to the player", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_pAddHP = CreateConVar("sm_vip_addhp", "5", "How many HP add to the player at spawn", FCVAR_NONE, true, 0.0, false);
+	g_pArmorValue = CreateConVar("sm_vip_armor", "100", "How many armor set to the player at spawn", FCVAR_NONE, true, 0.0, false);
+	g_pHelmet = CreateConVar("sm_vip_helmet", "1", "Sets the player the helmet", FCVAR_NONE, true, 0.0, true, 1.0);
+	g_pMoney = CreateConVar("sm_vip_money", "300", "How much money give to the player at spawn", FCVAR_NONE, true, 0.0, false);
+	g_pDefuser = CreateConVar("sm_vip_defuser", "1", "Gives the defuser to the player", FCVAR_NONE, true, 0.0, true, 1.0);
 	#if !defined CSS_SUPPORT
-	g_pTaser = CreateConVar("sm_vip_taser", "1", "Gives the taser (zeus) to the player", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_pTaser = CreateConVar("sm_vip_taser", "1", "Gives the taser (zeus) to the player", FCVAR_NONE, true, 0.0, true, 1.0);
 	#endif
-	g_pRound = CreateConVar("sm_vip_menu_round", "3", "Specifies from which round vip menu is enabled", FCVAR_PLUGIN, true, 0.0, false);
-	g_pPrefix = CreateConVar("sm_vip_prefix", "1", "Enables vip prefix in chat", FCVAR_PLUGIN, true, 0.0, true, 1.0);
-	g_pTimer = CreateConVar("sm_vip_msg", "60", "Time in seconds when the info is displayed to the players", FCVAR_PLUGIN, true, 0.0, false);
-	g_pReservation = CreateConVar("sm_vip_reservation", "1", "Defines that vip has a reservation slot (info only for motd)", FCVAR_PLUGIN, true, 0.0, true, 1.0);
+	g_pRound = CreateConVar("sm_vip_menu_round", "3", "Specifies from which round vip menu is enabled", FCVAR_NONE, true, 0.0, false);
+	g_pPrefix = CreateConVar("sm_vip_prefix", "1", "Enables vip prefix in chat", FCVAR_NONE, true, 0.0, true, 1.0);
+	g_pTimer = CreateConVar("sm_vip_msg", "60", "Time in seconds when the info is displayed to the players", FCVAR_NONE, true, 0.0, false);
+	g_pReservation = CreateConVar("sm_vip_reservation", "1", "Defines that vip has a reservation slot (info only for motd)", FCVAR_NONE, true, 0.0, true, 1.0);
 	g_pFlag = CreateConVar("sm_vip_flag", "t", "Defines flag for VIP privileges", FCVAR_NONE);
 
 	AutoExecConfig(true, "vip");
