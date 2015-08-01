@@ -601,7 +601,7 @@ public void OnConfigsExecuted()
 	//override command with new access
 	char szFlags[22];
 	g_pFlags.GetString(szFlags, sizeof(szFlags));
-	AddCommandOverride("menuv", Override_Command, szFlags);
+	AddCommandOverride("menuv", Override_Command, ReadFlagString(szFlags));
 }
 
 public Action TimerVipInfo(Handle timer)
