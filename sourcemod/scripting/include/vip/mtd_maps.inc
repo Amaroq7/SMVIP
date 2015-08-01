@@ -312,7 +312,7 @@ methodmap Player < Edict
 		this.VIPMenu();
 	}
 
-	public void ShowMOTD(const char[] title, const char[] msg, int type=MOTDPANEL_TYPE_INDEX)
+	public void ShowMOTD(const char[] title, const char[] msg, int type = MOTDPANEL_TYPE_INDEX)
 	{
 		char szNum[3];
 		IntToString(type, szNum, sizeof(szNum));

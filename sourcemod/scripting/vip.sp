@@ -35,7 +35,6 @@
 #define PRIMARY_WEAPONS_COUNT 18	//Defines amount of primary weapons
 #define SECONDARY_WEAPONS_COUNT 6	//Defines amount of secondary weapons
 #endif
-#define MAX_WEAPONS 63			//Property g_hMyWeapons
 /* End Defines */
 
 /* Plugin's info */
@@ -338,8 +337,6 @@ public void WebConvar(ConVar convar, const char[] oldValue, const char[] newValu
 
 void BuildUrl(ConVar changed = null, const char[] unique_name = "", const char[] oldValue = "", const char[] newValue = "")
 {
-	//g_szUrlMotd[] = { "http://localhost/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
-	
 	if(changed == null)
 	{
 		char szTemp[8];
@@ -822,8 +819,6 @@ public int PlayerMenuHandler(Menu menu, MenuAction action, int param1, int param
 
 			if(client.team == CS_TEAM_CT)
 				client.SetProp(Prop_Send, "m_bHasDefuser", g_pDefuser.BoolValue);
-
-			//int iUSP = GetEntProp(iWeapon, Prop_Send, "m_bSilencerOn", 1);
 		}
 		else if(param2 == 9)
 		{
