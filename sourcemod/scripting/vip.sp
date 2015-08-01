@@ -250,14 +250,32 @@ public void PluginConvar(ConVar convar, const char[] oldValue, const char[] newV
 	}
 	else if(convar == g_pTimer)
 	{
-		int iOldValue = StringToInt(oldValue);
-		int iNewValue = StringToInt(newValue);
+		float flOldValue = StringToFloat(oldValue);
+		float flNewValue = StringToFloat(newValue);
 
-		if(iOldValue > 0 && iNewValue <= 0)
+		//Message off
+		if(g_hTimerInfo && flOldValue > 0.0 && flNewValue <= 0.0)
+		{
 			KillTimer(g_hTimerInfo);
-	
-		else if(iOldValue <= 0 && iNewValue > 0)
-			g_hTimerInfo = CreateTimer(iNewValue*1.0, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+			g_hTimerInfo = null;
+		}
+		//Message on
+		else if(!g_hTimerInfo && flOldValue <= 0.0 && flNewValue > 0.0)
+			g_hTimerInfo = CreateTimer(flNewValue, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+
+		//Interval changed
+		else if(g_hTimerInfo && flNewValue > 0.0)
+		{
+			//Free memory
+			KillTimer(g_hTimerInfo);
+			//Then create new timer with new interval
+			g_hTimerInfo = CreateTimer(flNewValue, TimerVipInfo, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+		}
+		//We should never get here
+		else
+		{
+			LogError("Something has gone wrong! g_hTimerInfo null: %s, oldvalue: %f, newvalue: %f", (!g_hTimerInfo) ? "yes" : "no", flOldValue, flNewValue);
+		}
 	}
 	else if(convar == g_pPrefix)
 	{
