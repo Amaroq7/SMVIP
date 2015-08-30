@@ -148,12 +148,10 @@ public int IsClientVip_native(Handle plugin, int numParams)
 	Player client = Player(GetNativeCell(1));
 
 	if(1 <= client.index <= MaxClients)
-	{
-		ThrowNativeError(SP_ERROR_NATIVE, "Non-player index! (%i)", client.index);
-		return 0;
-	}
+		return client.vip;
 	
-	return client.vip;
+	ThrowNativeError(SP_ERROR_NATIVE, "Non-player index! (%i)", client.index);
+	return 0;
 }
 
 public void OnPluginStart()
