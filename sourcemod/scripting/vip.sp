@@ -30,7 +30,7 @@
 //#define CSS_SUPPORT			//Enables support for CSS
 #if !defined CSS_SUPPORT
 #define PRIMARY_WEAPONS_COUNT 23	//Defines amount of primary weapons
-#define SECONDARY_WEAPONS_COUNT 10	//Defines amount of secondary weapons
+#define SECONDARY_WEAPONS_COUNT 12	//Defines amount of secondary weapons
 #else
 #define PRIMARY_WEAPONS_COUNT 18	//Defines amount of primary weapons
 #define SECONDARY_WEAPONS_COUNT 6	//Defines amount of secondary weapons
@@ -73,12 +73,12 @@ int g_iRound;
 #if !defined CSS_SUPPORT
 char g_szPrimaryWeapons[PRIMARY_WEAPONS_COUNT][] = { "Nova", "XM1014", "MAG-7", "Sawed-off", "MAC-10", "MP7", "MP9", "UMP-45", "PP-Bizon", "P90", "FAMAS", "M4A4", "M4A1-S", "Galil AR", "AK-47", "SSG 08", "SG 553", "AUG", "AWP", "G3SG1", "SCAR-20", "M249", "Negev" };
 char g_szPrimaryWeaponsEngine[PRIMARY_WEAPONS_COUNT][] = { "weapon_nova", "weapon_xm1014", "weapon_mag7", "weapon_sawedoff", "weapon_mac10", "weapon_mp7", "weapon_mp9", "weapon_ump45", "weapon_bizon", "weapon_p90", "weapon_famas", "weapon_m4a1", "weapon_m4a1_silencer", "weapon_galilar", "weapon_ak47", "weapon_ssg08", "weapon_sg553", "weapon_aug", "weapon_awp", "weapon_g3sg1", "weapon_scar20", "weapon_m249", "weapon_negev" };
-char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "P2000", "P250", "USP-S", "Desert Deagle", "Five-SeveN", "Beretta 92s", "Tec-9", "CZ75 Auto (CT)", "CZ75 Auto (TT)"};
-char g_szSecondaryWeaponsEngine[SECONDARY_WEAPONS_COUNT][] = { "weapon_glock", "weapon_hkp2000", "weapon_p250", "weapon_usp_silencer", "weapon_deagle", "weapon_fiveseven", "weapon_elite", "weapon_tec9", "weapon_cz75a", "weapon_cz75a" };
+char g_szSecondaryWeapons[SECONDARY_WEAPONS_COUNT][] = { "Glock", "P2000", "P250", "USP-S", "Desert Deagle", "Five-SeveN", "Beretta 92s", "Tec-9", "CZ75 Auto (CT Skin)", "CZ75 Auto (TT Skin)", "Revolver (CT Skin)", "Revolver (TT Skin)"};
+char g_szSecondaryWeaponsEngine[SECONDARY_WEAPONS_COUNT][] = { "weapon_glock", "weapon_hkp2000", "weapon_p250", "weapon_usp_silencer", "weapon_deagle", "weapon_fiveseven", "weapon_elite", "weapon_tec9", "weapon_cz75a", "weapon_cz75a", "weapon_revolver", "weapon_revolver" };
 
 int g_iTeamPrimaryWeapons[PRIMARY_WEAPONS_COUNT] = { 0, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, 0, CS_TEAM_CT, 0, 0, 0, CS_TEAM_CT, CS_TEAM_CT, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, 0, CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_T, CS_TEAM_CT, 0, 0 };
 
-int g_iTeamSecondaryWeapons[SECONDARY_WEAPONS_COUNT] = { CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_CT, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, CS_TEAM_CT, CS_TEAM_T };
+int g_iTeamSecondaryWeapons[SECONDARY_WEAPONS_COUNT] = { CS_TEAM_T, CS_TEAM_CT, 0, CS_TEAM_CT, 0, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_T, CS_TEAM_CT, CS_TEAM_T, CS_TEAM_CT, CS_TEAM_T };
 
 char g_szUrlMotd[512] = { "http://YOUR_WEB/vip_web/index.html?web=http://YOUR_WEB/vip_web/vip.php?version=_version&armor=_armor&helmet=_helmet&money=_money&hp=_hp&def=_def&taser=_taser&menu=_menu&prefix=_prefix&res=_res" };
 #else
@@ -131,7 +131,7 @@ Handle g_hTimerInfo;
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	EngineVersion Engine = GetEngineVersion();
-	//If engine game is not csgo plugin won't load
+	//If engine game is not csgo or css plugin won't load
 	if(Engine != Engine_CSGO && Engine != Engine_CSS)
 	{
 		SetFailState("This plugin is not compatible with this Engine!");
