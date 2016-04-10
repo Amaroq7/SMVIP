@@ -489,7 +489,7 @@ public Action ExecuteSayText2(Handle timer, Handle data)
 			iPlayers[iCount++] = iClient.index;
 	}
 
-	BfWrite msg = view_as<BfWrite>(StartMessage("SayText2", iPlayers, iCount, dp.ReadCell()));
+	BfWrite msg = UserMessageToBfWrite(StartMessage("SayText2", iPlayers, iCount, dp.ReadCell()));
 
 	//index who send
 	msg.WriteByte(dp.ReadCell());
