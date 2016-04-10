@@ -957,24 +957,5 @@ public void OnPluginEnd()
 	delete g_hWeaponsMenuSecondary;
 	delete g_hPlayerPrim;
 	delete g_hPlayerSec;
-
-	if(g_bSayText2Hooked)
-	{
-		UnhookUserMessage(g_hSayText2, SayText2_Hook, true);
-		g_bSayText2Hooked = false;
-	}
-
-	#if !defined CSS_SUPPORT
-	UnhookUserMessage(g_hWarmupEnded, WarmupEnded_Hook, false);
-	UnhookEvent("cs_match_end_restart", EndRestartMatch, EventHookMode_PostNoCopy);
-	UnhookEvent("announce_phase_end", EndRestartMatch, EventHookMode_PostNoCopy);
-	UnhookEvent("buytime_ended", BuyTime_Ended, EventHookMode_PostNoCopy);
-	UnhookEvent("cs_intermission", EndRestartMatch, EventHookMode_PostNoCopy);
-	UnhookEvent("player_team", PlayerTeamEvent, EventHookMode_Pre);
-	#endif
-
-	UnhookEvent("round_start", RoundStartEvent, EventHookMode_PostNoCopy);
-	UnhookEvent("player_spawn", PlayerSpawn, EventHookMode_Post);
-
-	g_adtVips.Clear();
+	delete g_adtVips;
 }
