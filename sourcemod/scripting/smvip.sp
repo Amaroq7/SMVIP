@@ -138,20 +138,41 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 		return APLRes_Failure;
 	}
 
-	CreateNative("IsClientVip", IsClientVip_native);
+	RegPluginLibrary("smvip");
+
+	CreateNative("SMVIP_SetClientVip", SetClientVipNative);
+	CreateNative("SMVIP_IsClientVip", IsClientVipNative);
 
 	return APLRes_Success;
 }
 
-public int IsClientVip_native(Handle plugin, int numParams)
+public int SetClientVipNative(Handle plugin, int numParams)
 {
 	Player client = Player(GetNativeCell(1));
 
-	if(1 <= client.index <= MaxClients)
-		return client.vip;
+	if (client.index < 1 || client.index > MaxClients)
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Non-player index! (%i)", client.index);
+		return false;
+	}
+
+	bool bPrev = client.vip;
+	client.vip = GetNativeCell(2);
+
+	return bPrev;
+}
+
+public int IsClientVipNative(Handle plugin, int numParams)
+{
+	Player client = Player(GetNativeCell(1));
+
+	if (client.index < 1 || client.index > MaxClients)
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Non-player index! (%i)", client.index);
+		return false;
+	}
 	
-	ThrowNativeError(SP_ERROR_NATIVE, "Non-player index! (%i)", client.index);
-	return 0;
+	return client.vip;
 }
 
 public void OnPluginStart()

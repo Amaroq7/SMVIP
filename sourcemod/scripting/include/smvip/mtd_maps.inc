@@ -15,6 +15,11 @@
     along with SMVIP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#if defined _smvip_mtd_maps_included
+ #endinput
+#endif
+#define _smvip_mtd_maps_included
+
 methodmap Entity
 {
 	property int index
